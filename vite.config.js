@@ -5,8 +5,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: "./src/index.ts",
-      name: "AresDataTable",
-      fileName: (format) => `ares-datatable.${format}.js`,
+      name: "DataTable",
+      fileName: () => 'index.js',
     },
     rollupOptions: {
       external: ["vue"],
@@ -15,6 +15,7 @@ export default defineConfig({
           vue: "Vue",
         },
       },
+      assetFileNames: 'index.css',
     },
   },
   plugins: [vue()],
