@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    // Цільова версія JavaScript
+    "module": "esnext",
+    // Використовувати ES-модулі
+    "strict": true,
+    // Увімкнути всі суворі перевірки
+    "jsx": "preserve",
+    // Для Vue JSX/TSX (якщо використовується)
+    "moduleResolution": "node",
+    // Резолюція модулів у стилі Node.js
+    "esModuleInterop": true,
+    // Дозволяє імпорт CommonJS модулів
+    "skipLibCheck": true,
+    // Пропуск перевірки типів у бібліотеках
+    "forceConsistentCasingInFileNames": true,
+    // Регістр чутливий до імен файлів
+    "resolveJsonModule": true,
+    // Дозволяє імпортувати JSON-файли
+    "baseUrl": ".",
+    // Базова директорія
+    "paths": {
+      // Налаштування псевдонімів
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "allowJs": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
+  // Файли для компіляції
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+  // Виключені файли
+}

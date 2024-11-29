@@ -1,0 +1,43 @@
+{
+  "name": "ares-datatable",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arendach/datatable.git"
+  },
+  "keywords": [
+    "datatable",
+    "vue",
+    "component",
+    "bootstrap"
+  ],
+  "author": "Arendach Taras",
+  "license": "MIT",
+  "description": "Vue 3 Bootstrap datatable package",
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/compiler-sfc": "^3.5.13",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.1",
+    "vue-tsc": "^2.1.10"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "dependencies": {
+    "dateformat": "^5.0.3",
+    "pinia": "^2.2.8",
+    "store2": "^2.14.3",
+    "vue": "^3.5.13",
+    "xlsx": "^0.18.5"
+  }
+}
