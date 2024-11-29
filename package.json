@@ -1,7 +1,7 @@
 {
   "name": "ares-datatable",
   "type": "module",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
