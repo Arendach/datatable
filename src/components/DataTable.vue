@@ -1,38 +1,7 @@
 <template>
   <div class="table-responsive" :style="{ 'height': height }">
-    <div class="container-fluid">
-      <div class="row" style="padding: 10px; border: 1px solid #ccc; border-bottom: none">
-        <div class="col">
-          <slot name="control"></slot>
-        </div>
-        <div class="col" style="text-align: right">
-          <!-- Вибір колонок -->
-          <div class="btn-group btn-group-sm" style="margin-right: 10px;">
-            <button type="button" class="btn btn-outline-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-              <i class="fa fa-eye"></i>
-            </button>
-            <ul class="dropdown-menu">
-              <li class="dropdown-item" v-if="autoListing">
-                <input type="checkbox" @change="saveSelectedColumns"> <span style="margin-left: 5px;">№ з/п</span>
-              </li>
-              <li class="dropdown-item" v-if="hasCheckbox">
-                <input type="checkbox" @change="saveSelectedColumns"> <span style="margin-left: 5px;">Чекбокс</span>
-              </li>
-              <li v-for="column in columns" class="dropdown-item">
-                <input type="checkbox" v-model="column.show" @change="saveSelectedColumns">
-                <span style="margin-left: 5px;" v-text="column.title"></span>
-              </li>
-            </ul>
-          </div>
 
-          <!-- Експорт в ЕКСЕЛЬ-->
-          <button @click="exportToEXCEL" title="Експортувати в EXCEL" class="btn btn-outline-success btn-sm">
-            <i class="fa fa-file-excel"></i>
-          </button>
-        </div>
-      </div>
-    </div>
+    <table-header/>
 
     <table
         class="table table-sm table-bordered" :class="[skin ? `table-${skin}` : '']"
@@ -125,87 +94,11 @@
       </tfoot>
     </table>
   </div>
-  <div v-if="pagination && filterRowCount" class="bh-pagination bh-py-5" :class="{ 'pe-none': currentLoader }">
-    <div class="bh-flex bh-items-center bh-flex-wrap bh-flex-col sm:bh-flex-row bh-gap-4">
-      <div class="bh-pagination-info bh-flex bh-items-center">
-        <span class="bh-mr-2">
-          {{ stringFormat(paginationInfo, filterRowCount ? offset : 0, limit, filterRowCount) }}
-        </span>
-        <select v-if="showPageSize" v-model="currentPageSize" class="bh-pagesize">
-          <option v-for="option in pageSizeOptions" :value="option" :key="option">
-            {{ option }}
-          </option>
-        </select>
-      </div>
 
-      <div class="bh-pagination-number sm:bh-ml-auto bh-inline-flex bh-items-center bh-space-x-1">
-        <button v-if="showFirstPage" type="button" class="bh-page-item first-page"
-                :class="{ disabled: currentPage <= 1 }" @click="currentPage = 1">
-          <span v-if="firstArrow" v-html="firstArrow"></span>
-          <svg v-else aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
-            <g fill="currentColor" fill-rule="evenodd">
-              <path
-                  d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-              <path
-                  d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-            </g>
-          </svg>
-        </button>
-        <button type="button" class="bh-page-item previous-page" :class="{ disabled: currentPage <= 1 }"
-                @click="previousPage">
-          <span v-if="previousArrow" v-html="previousArrow"> </span>
-          <svg v-else aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
-            <path
-                fill="currentColor"
-                fill-rule="evenodd"
-                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
-            />
-          </svg>
-        </button>
-
-        <template v-if="showNumbers">
-          <button
-              v-for="page in paging"
-              :key="page"
-              type="button"
-              class="bh-page-item"
-              :class="{disabled: currentPage === page, 'bh-active': page === currentPage,}"
-              @click="movePage(page)"
-          >
-            {{ page }}
-          </button>
-        </template>
-
-        <button type="button" class="bh-page-item next-page" :class="{ disabled: currentPage >= maxPage }"
-                @click="nextPage">
-          <span v-if="nextArrow" v-html="nextArrow"> </span>
-          <svg v-else aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
-            <path
-                fill="currentColor"
-                fill-rule="evenodd"
-                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8L4.646 2.354a.5.5 0 0 1 0-.708z"
-            />
-          </svg>
-        </button>
-
-        <button v-if="showLastPage" type="button" class="bh-page-item last-page"
-                :class="{ disabled: currentPage >= maxPage }" @click="currentPage = maxPage">
-          <span v-if="lastArrow" v-html="lastArrow"> </span>
-          <svg v-else aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
-            <g fill="currentColor" fill-rule="evenodd">
-              <path
-                  d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8L3.646 2.354a.5.5 0 0 1 0-.708z"/>
-              <path
-                  d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8L7.646 2.354a.5.5 0 0 1 0-.708z"/>
-            </g>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
+  <!--  <pagination/>-->
 </template>
 
-<script>
+<script lang="ts">
 import columnHeader from './column-header.vue'
 import * as XLSX from "xlsx"
 import dateFormat from "dateformat"
@@ -213,53 +106,182 @@ import RenderBoolean from "./render-boolean.vue"
 import mixins from "../mixins"
 import store2 from 'store2'
 import RenderDate from "./render-date.vue"
+import {dataTableStore} from "@/stores/data-table-store"
+import {representationStore} from "@/stores/representation-store"
+import {paginateStore} from "@/stores/paginate-store"
+import {filterStore} from "@/stores/filter-store"
+import {mapStores} from "pinia"
+import TableHeader from "@/components/table-header.vue"
+import Pagination from "@/components/pagination.vue"
+import {Column} from "@/types/datatable-props/columns"
 
 export default {
   name: 'DataTable',
   props: {
-    loading: {type: Boolean, default: true,},
-    isServerMode: {type: Boolean, default: false,},
+    // representation
     skin: {type: String},
-    totalRows: {type: Number, default: null,},
-    rows: {type: Array},
-    columns: {type: Array},
+    rowClass: {},
+    cellClass: {},
+    height: {type: String},
+    loading: {type: Boolean},
+    hasAutoListing: {type: Boolean},
     hasCheckbox: {type: Boolean},
-    search: {type: String},
-    page: {type: Number, default: 1,},
-    pageSize: {type: Number, default: 10},
-    pageSizeOptions: {type: Array, default: [10, 20, 30, 50, 100],},
-    showPageSize: {type: Boolean,},
-    rowClass: {default: null,},
-    cellClass: {type: Array | Function},
-    sortable: {type: Boolean,},
-    sortColumn: {type: String, default: null,},
-    sortDirection: {type: String},
-    hasFilter: {type: Boolean},
-    pagination: {type: Boolean, default: true,},
-    showNumbers: {type: Boolean},
-    showNumbersCount: {type: Number},
-    showFirstPage: {type: Boolean},
-    showLastPage: {type: Boolean},
+    cloneHeaderInFooter: {type: Boolean},
+
+    // data
+    columns: {type: Array<Column>, required: true},
+    rows: {type: Array<Object>, required: true},
+    isServerMode: {type: Boolean},
+
+    // paginate
+    totalRows: {type: Number},
+    page: {type: Number},
+    pageSize: {type: Number},
+    pageSizeOptions: {type: Array},
+    usePageSize: {type: Boolean},
+    usePagination: {type: Boolean, default: false},
+    isShowNumbers: {type: Boolean},
+    isShowNumbersCount: {type: Number},
+    isShowFirstPage: {type: Boolean},
+    isShowLastPage: {type: Boolean},
     firstArrow: {type: String},
     lastArrow: {type: String},
     nextArrow: {type: String},
     previousArrow: {type: String},
-    paginationInfo: {type: String, default: 'Показано з {0} по {1} з {2} записів'},
-    noDataContent: {type: String, default: 'Немає даних для відображення!',},
-    height: {type: String, default: 'auto',},
-    cloneHeaderInFooter: {type: Boolean},
-    selectRowOnClick: {type: Boolean, default: false,},
-    autoListing: {type: Boolean, default: true,},
+    paginationInfo: {type: String},
+    noDataContent: {type: String},
+
+    // filter
+    search: {type: String},
+    useSorting: {type: Boolean},
+    sortColumn: {type: String},
+    sortDirection: {type: String},
+    useFiltering: {type: Boolean},
+    useSelectRowOnClick: {type: Boolean},
+    usePersistSelection: {type: Boolean},
+
     uniqueId: {type: String, default: 'datatable',},
-    persistSelection: {type: Boolean, default: true,},
   },
   components: {
+    TableHeader,
     RenderDate,
     RenderBoolean,
     columnHeader,
+    Pagination,
   },
   mixins: [mixins,],
   beforeMount() {
+    // representation
+    if (this.skin) {
+      this.representationStore.setSkin(this.skin)
+    }
+
+    if (this.rowClass) {
+      this.representationStore.setRowClass(this.rowClass)
+    }
+
+    if (this.cellClass) {
+      this.representationStore.setCellClass(this.cellClass)
+    }
+
+    if (this.height) {
+      this.representationStore.setHeight(this.height)
+    }
+
+    if (this.loading) {
+      this.representationStore.setLoading(this.loading)
+    }
+
+    if (this.hasAutoListing) {
+      this.representationStore.setHasAutoListing(this.hasAutoListing)
+    }
+
+    if (this.hasCheckbox) {
+      this.representationStore.setHasCheckbox(this.hasCheckbox)
+    }
+
+    if (this.cloneHeaderInFooter) {
+      this.representationStore.setCloneHeaderInFooter(this.cloneHeaderInFooter)
+    }
+
+    // data
+    if (this.columns) {
+      this.dataTableStore.setColumns(this.columns)
+    }
+
+    if (this.rows) {
+      this.dataTableStore.setRows(this.rows)
+    }
+
+    if (this.isServerMode) {
+      this.dataTableStore.setIsServerMode(this.isServerMode)
+    }
+
+    // paginate
+    if (this.totalRows) {
+      this.paginateStore.setTotalRows(this.totalRows)
+    }
+
+    if (this.page) {
+      this.paginateStore.setPage(this.page)
+    }
+
+    if (this.pageSize) {
+      this.paginateStore.setPageSize(this.pageSize)
+    }
+
+    if (this.pageSizeOptions) {
+      this.paginateStore.setPageSizeOptions(this.pageSizeOptions)
+    }
+
+    if (this.usePageSize) {
+      this.paginateStore.setUsePageSize(this.usePageSize)
+    }
+
+    if (typeof this.usePagination !== 'undefined') {
+      this.paginateStore.setUsePagination(this.usePagination)
+    }
+
+    if (this.isShowNumbers) {
+      this.paginateStore.setIsShowNumbers(this.isShowNumbers)
+    }
+
+    if (this.isShowNumbersCount) {
+      this.paginateStore.setIsShowNumbersCount(this.isShowNumbersCount)
+    }
+
+    if (this.isShowFirstPage) {
+      this.paginateStore.setIsShowFirstPage(this.isShowFirstPage)
+    }
+
+    if (this.isShowLastPage) {
+      this.paginateStore.setIsShowLastPage(this.isShowLastPage)
+    }
+
+    if (this.firstArrow) {
+      this.paginateStore.setFirstArrow(this.firstArrow)
+    }
+
+    if (this.lastArrow) {
+      this.paginateStore.setLastArrow(this.lastArrow)
+    }
+
+    if (this.nextArrow) {
+      this.paginateStore.setNextArrow(this.nextArrow)
+    }
+
+    if (this.previousArrow) {
+      this.paginateStore.setPreviousArrow(this.previousArrow)
+    }
+
+    if (this.paginationInfo) {
+      this.paginateStore.setPaginationInfo(this.paginationInfo)
+    }
+
+    if (this.noDataContent) {
+      this.paginateStore.setNoDataContent(this.noDataContent)
+    }
+
     this.setDefaultColumns()
     this.loadSelectedColumns()
   },
@@ -268,7 +290,7 @@ export default {
   },
   data() {
     return {
-      filterItems: [],
+      filterItems: this.rows,
       currentPage: 1,
       currentPageSize: 0,
       oldPageSize: this.pageSize,
@@ -285,11 +307,12 @@ export default {
       isOpenFilter: null,
       clickCount: 0,
       timer: null,
-      delay: 230,
+      delay: 220,
       persistedElements: [],
     }
   },
   computed: {
+    ...mapStores(dataTableStore, representationStore, paginateStore, filterStore),
     uniqueKey() {
       return this.columns.find(col => col.isUnique)?.field || 'id';
     },
@@ -499,6 +522,12 @@ export default {
       this.$emit('rowSelect', rows);
     },
     filterRows() {
+
+      this.filterItems = this.rows;
+      this.filterRowCount = this.rows.length;
+
+      return;
+
       let result = [];
       let rows = this.filteredRows();
 
@@ -522,7 +551,6 @@ export default {
       let rows = this.rows || []
 
       if (this.isServerMode) return rows
-
 
       this.columns?.forEach((d) => {
         if (d.filter && ((d.value !== undefined && d.value !== null && d.value !== '') || d.condition === 'is_null' || d.condition === 'is_not_null' || d.type === "date-range")) {
@@ -892,7 +920,7 @@ export default {
       XLSX.utils.book_append_sheet(wb, ws, "Data")
       XLSX.writeFileXLSX(wb, `${this.uniqueId}_${date}.xlsx`)
     },
-  }
+  },
 }
 </script>
 
