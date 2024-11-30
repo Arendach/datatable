@@ -2,7 +2,7 @@ import {defineStore} from 'pinia'
 
 type UiClass = Array<string> | null | Function | String;
 
-export const representationStore = defineStore('representation', {
+const useRepresentationStore = defineStore('representation', {
     state: () => ({
         skin: null as String | null,
         rowClass: null as UiClass,
@@ -13,10 +13,6 @@ export const representationStore = defineStore('representation', {
         hasCheckbox: false as Boolean,
         cloneHeaderInFooter: false as Boolean,
     }),
-    getters: {
-        hasAutoListing: (state): Boolean => state.hasAutoListing,
-        hasCheckbox: (state): Boolean => state.hasCheckbox,
-    },
     actions: {
         setSkin(skin: String | null): void {
             this.$state.skin = skin
@@ -44,3 +40,6 @@ export const representationStore = defineStore('representation', {
         }
     }
 })
+
+
+export default useRepresentationStore

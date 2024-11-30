@@ -1,167 +1,71 @@
 <template>
-  <div class="table-responsive" :style="{ 'height': height }">
-
+  <div class="table-responsive" :style="{ 'height': props.height }">
     <table-header/>
 
-    <table
-        class="table table-sm table-bordered" :class="[skin ? `table-${skin}` : '']"
-        :id="uniqueId"
-    >
-      <thead>
-      <column-header
-          :all="$props"
-          :current-sort-column="currentSortColumn"
-          :current-sort-direction="currentSortDirection"
-          :is-open-filter="isOpenFilter"
-          :check-all="selectedAll"
-          @selectAll="selectAll"
-          @sortChange="sortChange"
-          @filterChange="filterChange"
-          @toggleFilterMenu="toggleFilterMenu"
-          ref="header"
-      />
-      </thead>
-      <tbody>
-      <template v-if="filterRowCount">
-        <tr
-            v-for="(item, i) in filterItems"
-            :key="item[uniqueKey] ? item[uniqueKey] : i"
-            :class="[rowClass && typeof rowClass === 'function' ? rowClass(item) : rowClass, selectRowOnClick ? 'bh-cursor-pointer' : '', 'exportable']"
-            @click="rowClick(item, i)"
-        >
-          <td v-if="autoListing" v-text="i + 1" class="centered exportable"></td>
-          <td v-if="hasCheckbox" class="centered">
-            <div class="form-check">
-              <input class="form-check-input" v-model="selected" type="checkbox"
-                     :value="item[uniqueKey] ? item[uniqueKey] : i" @click.stop/>
-            </div>
-          </td>
-          <template v-for="col in columns">
-            <td v-if="col.show" :key="col.field" :class="[
-                  typeof cellClass === 'function' ? cellClass(item) : cellClass,
-                  col.position ? col.position : '',
-                  col.exportable ? 'exportable' : '',
-                  col.className ? col.className : '',
-               ]"
-            >
-              <template v-if="$slots[col.field]">
-                <slot :name="col.field" :value="item"></slot>
-              </template>
-              <div v-else-if="col.cellRenderer" v-html="col.cellRenderer(item)"></div>
-              <template v-else-if="col.type === 'bool'">
-                <render-boolean :is-check="cellValue(item, col.field)"/>
-              </template>
-              <template v-else-if="col.type === 'date'">
-                <render-date :name="col.field" :item="item"></render-date>
-              </template>
-              <template v-else>
-                {{ cellValue(item, col.field) }}
-              </template>
-            </td>
-          </template>
-        </tr>
-      </template>
-      <tr v-if="!filterRowCount && !currentLoader">
-        <td :colspan="countColumns" class="no-data" v-html="noDataContent"></td>
-      </tr>
+    <table class="table table-sm table-bordered" :class="[skin ? `table-${skin}` : '']" :id="uniqueId">
 
-      <template v-if="!filterRowCount && currentLoader">
-        <tr>
-          <td :colspan="countColumns">
-            <div class="d-flex justify-content-center">
-              <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </template>
-      </tbody>
+      <display-thead/>
 
-      <tfoot v-if="cloneHeaderInFooter">
-      <column-header
-          :all="props"
-          :current-sort-column="currentSortColumn"
-          :current-sort-direction="currentSortDirection"
-          :is-open-filter="isOpenFilter"
-          :is-footer="true"
-          :check-all="selectedAll"
-          @selectAll="selectAll"
-          @sortChange="sortChange"
-          @filterChange="filterChange"
-          @toggleFilterMenu="toggleFilterMenu"
-      />
-      </tfoot>
+      <display-tbody/>
+
+      <display-tfoot/>
+
     </table>
   </div>
 
-  <!--  <pagination/>-->
+<!--  <display-pagination/>-->
 </template>
 
-<script lang="ts">
-import columnHeader from './column-header.vue'
-import * as XLSX from "xlsx"
-import dateFormat from "dateformat"
-import RenderBoolean from "./render-boolean.vue"
-import mixins from "../mixins"
-import store2 from 'store2'
-import RenderDate from "./render-date.vue"
-import {dataTableStore} from "@/stores/data-table-store"
-import {representationStore} from "@/stores/representation-store"
-import {paginateStore} from "@/stores/paginate-store"
-import {filterStore} from "@/stores/filter-store"
-import {mapStores} from "pinia"
+<script setup lang="ts">
+import useDataTableStore from "@/stores/data-table-store"
+import useRepresentationStore from "@/stores/representation-store"
 import TableHeader from "@/components/table-header.vue"
-import Pagination from "@/components/pagination.vue"
-import {Column} from "@/types/datatable-props/columns"
+import {DataTableProps} from "@/types/datatable-props"
+import DisplayTbody from "@/components/body/display-tbody.vue"
+import DisplayThead from "@/components/header/display-thead.vue"
+import DisplayTfoot from "@/components/footer/display-tfoot.vue"
+import DisplayPagination from "@/components/pagination/display-pagination.vue"
+import {Column, ColumnType} from "@/types/datatable-props/column"
 
-export default {
+
+const props = defineProps<DataTableProps>()
+
+props.columns.map((item: Column) => {
+  const type = typeof item.type === 'undefined' ? ColumnType.STRING : item.type
+  item.type = type
+  item.isUnique = item.isUnique !== undefined ? item.isUnique : false
+  item.show = item.show !== undefined ? item.show : true
+  item.filter = item.filter !== undefined ? item.filter : false
+  item.search = item.search !== undefined ? item.search : false
+  item.sort = item.sort !== undefined ? item.sort : false
+  item.html = item.html !== undefined ? item.html : false
+  item.condition = !type || type === 'string' ? 'contain' : 'equal'
+  item.exportable = item.exportable !== undefined ? item.exportable : true
+  item.selectable = item.selectable !== undefined ? item.selectable : false
+
+  return item
+})
+
+// dataTableStore
+const dataTableStore = useDataTableStore()
+dataTableStore.setColumns(props.columns)
+dataTableStore.setRows(props.rows)
+dataTableStore.setIsServerMode(props.isServerMode)
+
+// representationStore
+const representationStore = useRepresentationStore()
+if (typeof props.skin !== 'undefined') representationStore.setSkin(props.skin)
+if (typeof props.rowClass !== 'undefined') representationStore.setRowClass(props.rowClass)
+if (typeof props.cellClass !== 'undefined') representationStore.setCellClass(props.cellClass)
+if (typeof props.height !== 'undefined') representationStore.setHeight(props.height)
+if (typeof props.loading !== 'undefined') representationStore.setLoading(props.loading)
+if (typeof props.hasAutoListing !== 'undefined') representationStore.setHasAutoListing(props.hasAutoListing)
+if (typeof props.hasCheckbox) representationStore.setHasCheckbox(props.hasCheckbox)
+if (typeof props.cloneHeaderInFooter) representationStore.setCloneHeaderInFooter(props.cloneHeaderInFooter)
+
+
+/*export default {
   name: 'DataTable',
-  props: {
-    // representation
-    skin: {type: String},
-    rowClass: {},
-    cellClass: {},
-    height: {type: String},
-    loading: {type: Boolean},
-    hasAutoListing: {type: Boolean},
-    hasCheckbox: {type: Boolean},
-    cloneHeaderInFooter: {type: Boolean},
-
-    // data
-    columns: {type: Array<Column>, required: true},
-    rows: {type: Array<Object>, required: true},
-    isServerMode: {type: Boolean},
-
-    // paginate
-    totalRows: {type: Number},
-    page: {type: Number},
-    pageSize: {type: Number},
-    pageSizeOptions: {type: Array},
-    usePageSize: {type: Boolean},
-    usePagination: {type: Boolean, default: false},
-    isShowNumbers: {type: Boolean},
-    isShowNumbersCount: {type: Number},
-    isShowFirstPage: {type: Boolean},
-    isShowLastPage: {type: Boolean},
-    firstArrow: {type: String},
-    lastArrow: {type: String},
-    nextArrow: {type: String},
-    previousArrow: {type: String},
-    paginationInfo: {type: String},
-    noDataContent: {type: String},
-
-    // filter
-    search: {type: String},
-    useSorting: {type: Boolean},
-    sortColumn: {type: String},
-    sortDirection: {type: String},
-    useFiltering: {type: Boolean},
-    useSelectRowOnClick: {type: Boolean},
-    usePersistSelection: {type: Boolean},
-
-    uniqueId: {type: String, default: 'datatable',},
-  },
   components: {
     TableHeader,
     RenderDate,
@@ -171,51 +75,7 @@ export default {
   },
   mixins: [mixins,],
   beforeMount() {
-    // representation
-    if (this.skin) {
-      this.representationStore.setSkin(this.skin)
-    }
 
-    if (this.rowClass) {
-      this.representationStore.setRowClass(this.rowClass)
-    }
-
-    if (this.cellClass) {
-      this.representationStore.setCellClass(this.cellClass)
-    }
-
-    if (this.height) {
-      this.representationStore.setHeight(this.height)
-    }
-
-    if (this.loading) {
-      this.representationStore.setLoading(this.loading)
-    }
-
-    if (this.hasAutoListing) {
-      this.representationStore.setHasAutoListing(this.hasAutoListing)
-    }
-
-    if (this.hasCheckbox) {
-      this.representationStore.setHasCheckbox(this.hasCheckbox)
-    }
-
-    if (this.cloneHeaderInFooter) {
-      this.representationStore.setCloneHeaderInFooter(this.cloneHeaderInFooter)
-    }
-
-    // data
-    if (this.columns) {
-      this.dataTableStore.setColumns(this.columns)
-    }
-
-    if (this.rows) {
-      this.dataTableStore.setRows(this.rows)
-    }
-
-    if (this.isServerMode) {
-      this.dataTableStore.setIsServerMode(this.isServerMode)
-    }
 
     // paginate
     if (this.totalRows) {
@@ -312,10 +172,6 @@ export default {
     }
   },
   computed: {
-    ...mapStores(dataTableStore, representationStore, paginateStore, filterStore),
-    uniqueKey() {
-      return this.columns.find(col => col.isUnique)?.field || 'id';
-    },
     offset() {
       return (this.currentPage - 1) * this.currentPageSize + 1
     },
@@ -348,13 +204,6 @@ export default {
       }
 
       return Array.from(Array(endPage + 1 - startPage).keys()).map((i) => startPage + i)
-    },
-    countColumns() {
-      let count = this.columns.length
-      if (this.autoListing) count++
-      if (this.hasCheckbox) count++
-
-      return count
     },
     storage() {
       return store2.local.namespace(this.uniqueId)
@@ -880,48 +729,9 @@ export default {
         return item
       })
     },
-    tableToJson(table) {
-      let data = []
 
-      let headers = []
-      for (let i = 0; i < table.rows[0].cells.length; i++) {
-        if (!table.rows[0].cells[i].classList.contains('exportable')) continue
-
-        headers.push(table.rows[0].cells[i].innerText)
-      }
-
-      data.push(headers)
-
-      // go through cells
-      for (let i = 1; i < table.rows.length; i++) {
-        let tableRow = table.rows[i]
-        let rowData = []
-
-        if (!tableRow.classList.contains('exportable')) continue
-
-        for (let j = 0; j < tableRow.cells.length; j++) {
-          let cell = tableRow.cells[j]
-          if (!cell.classList.contains('exportable')) continue
-          rowData.push(tableRow.cells[j].innerText);
-        }
-
-        data.push(rowData)
-      }
-
-      return data
-    },
-    exportToEXCEL() {
-      let table = document.querySelector(`#${this.uniqueId}`)
-      const data = this.tableToJson(table)
-      const date = dateFormat(new Date, 'dd-mm-yyyy_H-MM')
-
-      const ws = XLSX.utils.json_to_sheet(data)
-      const wb = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(wb, ws, "Data")
-      XLSX.writeFileXLSX(wb, `${this.uniqueId}_${date}.xlsx`)
-    },
   },
-}
+}*/
 </script>
 
 <style>

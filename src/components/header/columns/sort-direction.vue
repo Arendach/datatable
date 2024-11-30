@@ -15,14 +15,11 @@
   </span>
 </template>
 
-<script>
-export default {
-  name: 'SortDirection',
-  props: {
-    sortable: {type: Boolean, default: false,},
-    column: {type: Object,},
-    sortColumn: {type: String,},
-    sortDirection: {type: String,},
-  }
-}
+<script setup lang="ts">
+defineProps({
+  sortable: {type: Boolean, default: false,},
+  column: {type: Object,},
+  sortColumn: {type: String,},
+  sortDirection: {type: String,},
+})
 </script>

@@ -31,6 +31,7 @@
   "license": "MIT",
   "description": "Vue 3 Bootstrap datatable package",
   "devDependencies": {
+    "@types/dateformat": "^5.0.2",
     "@types/node": "^22.10.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/compiler-sfc": "^3.5.13",

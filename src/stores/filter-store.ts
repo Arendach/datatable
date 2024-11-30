@@ -5,7 +5,7 @@ enum SortDirection {
     DESC = 'desc'
 }
 
-export const filterStore = defineStore('filter', {
+const useFilterStore = defineStore('filter', {
     state: () => ({
         search: '' as String,
         useSorting: false as Boolean,
@@ -15,15 +15,6 @@ export const filterStore = defineStore('filter', {
         useSelectRowOnClick: false as Boolean,
         usePersistSelection: false as Boolean,
     }),
-    getters: {
-        search: (state): String => state.search,
-        useSorting: (state): Boolean => state.useSorting,
-        sortColumn: (state): String | null => state.sortColumn,
-        sortDirection: (state): SortDirection => state.sortDirection,
-        useFiltering: (state): Boolean => state.useFiltering,
-        useSelectRowOnClick: (state): Boolean => state.useSelectRowOnClick,
-        usePersistSelection: (state): Boolean => state.usePersistSelection,
-    },
     actions: {
         setSearch(search: String): void {
             this.$state.search = search
@@ -48,3 +39,5 @@ export const filterStore = defineStore('filter', {
         },
     }
 })
+
+export default useFilterStore

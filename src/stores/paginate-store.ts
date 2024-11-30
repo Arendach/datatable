@@ -20,7 +20,7 @@ interface PaginationState {
     noDataContent: string;
 }
 
-export const paginateStore = defineStore('paginate', {
+const usePaginateStore = defineStore('paginate', {
     state: (): PaginationState => ({
         totalRows: 0,
         page: 1,
@@ -90,4 +90,6 @@ export const paginateStore = defineStore('paginate', {
             this.noDataContent = noDataContent;
         },
     },
-});
+})
+
+export default usePaginateStore

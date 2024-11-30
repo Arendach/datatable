@@ -1,26 +1,31 @@
 import {defineStore} from 'pinia'
-import {Column} from "@/types/datatable-props/columns"
+import {Column} from "@/types/datatable-props/column"
 
-export const dataTableStore = defineStore('dataTable', {
+const useDataTableStore = defineStore('dataTable', {
     state: () => ({
         columns: [] as Column[],
         rows: [] as Object[],
         isServerMode: false as Boolean,
+        selected: [] as number[],
     }),
     getters: {
-        columns: (state): Column[] => state.columns,
-        rows: (state): Object[] => state.rows,
-        isServerMode: (state): Boolean => state.isServerMode,
+        filterRowCount: (state) => state.rows.length,
+        filterItems: (state) => state.rows,
     },
     actions: {
-        setColumns(columns: Column[]) {
-            this.$state.columns = columns
+        setColumns(columns: Column[]): void {
+            this.columns = columns
         },
-        setRows(rows: Object[]) {
-            this.$state.rows = rows
+        setRows(rows: Object[]): void {
+            this.rows = rows
         },
         setIsServerMode(isSeverMode: Boolean): void {
-            this.$state.isServerMode = isSeverMode
+            this.isServerMode = isSeverMode
         },
+        setSelected(selected: number[]): void {
+            this.selected = selected
+        }
     }
 })
+
+export default useDataTableStore

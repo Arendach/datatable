@@ -26,7 +26,8 @@
         "src/*"
       ]
     },
-    "allowJs": true
+    "allowJs": true,
+    "types": ["vite/client", "vue"]
   },
   "include": [
     "src/**/*.ts",
