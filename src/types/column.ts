@@ -1,9 +1,5 @@
-export enum ColumnType {
-    DATE = 'date',
-    STRING = 'string',
-    NUMBER = 'number',
-    BOOLEAN = 'boolean'
-}
+import ColumnType from "@/types/column-type"
+import Condition from "@/types/condition"
 
 export interface Column {
     // field from object for display
@@ -40,11 +36,26 @@ export interface Column {
     selectable?: boolean
 
     // filter condition
-    condition?: string
+    condition?: Condition
 
     // callback for render cell
     cellRender?: Function
 
     // class of cell
     className?: string
+
+    // column width
+    width?: string,
+
+    // column max width
+    maxWidth?: string,
+
+    // filter column
+    filterValue?: any
+
+    // start date for filter "date-range"
+    startDate?: string
+
+    // end date for filter "date-range"
+    endDate?: string
 }

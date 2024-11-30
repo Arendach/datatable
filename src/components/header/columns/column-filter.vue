@@ -1,73 +1,74 @@
 <template>
   <ul class="dropdown-menu dropdown-menu-sm-end" @click="close">
-    <li class="dropdown-item" :class="{ active: column.condition === '' }">
-      <div @click="select('')">Без фільтра</div>
+    <li class="dropdown-item" :class="{ active: column.condition === Condition.WITHOUT }">
+      <div @click="select(Condition.WITHOUT)">Без фільтра</div>
     </li>
     <template v-if="column.type === 'string'">
-      <li class="dropdown-item" :class="{ active: column.condition === 'contain' }">
-        <div @click="select('contain')">Містить</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.CONTAIN }">
+        <div @click="select(Condition.CONTAIN)">Містить</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'not_contain' }">
-        <div @click="select('not_contain')">Не містить</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.NOT_CONTAIN }">
+        <div @click="select(Condition.NOT_CONTAIN)">Не містить</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'equal' }">
-        <div @click="select('equal')">Рівно</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.EQUAL }">
+        <div @click="select(Condition.EQUAL)">Рівно</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'not_equal' }">
-        <div @click="select('not_equal')">Не рівно</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.NOT_EQUAL }">
+        <div @click="select(Condition.NOT_EQUAL)">Не рівно</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'start_with' }">
-        <div @click="select('start_with')">Починається з</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.START_WITH }">
+        <div @click="select(Condition.START_WITH)">Починається з</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'end_with' }">
-        <div @click="select('end_with')">Закінчується на</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.END_WITH }">
+        <div @click="select(Condition.END_WITH)">Закінчується на</div>
       </li>
     </template>
     <template v-else-if="column.type === 'number'">
-      <li class="dropdown-item" :class="{ active: column.condition === 'equal' }">
-        <div @click="select('equal')">Рівно</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.EQUAL }">
+        <div @click="select(Condition.EQUAL)">Рівно</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'not_equal' }">
-        <div @click="select('not_equal')">Не рівно</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.NOT_EQUAL }">
+        <div @click="select(Condition.NOT_EQUAL)">Не рівно</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'greater_than' }">
-        <div @click="select('greater_than')">Більше ніж</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.GREATER_THAN }">
+        <div @click="select(Condition.GREATER_THAN)">Більше ніж</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'greater_than_equal' }">
-        <div @click="select('greater_than_equal')">Більше або рівно</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.GREATER_THAN_EQUAL }">
+        <div @click="select(Condition.GREATER_THAN_EQUAL)">Більше або рівно</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'less_than' }">
-        <div @click="select('less_than')">Менше ніж</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.LESS_THAN }">
+        <div @click="select(Condition.LESS_THAN)">Менше ніж</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'less_than_equal' }">
-        <div @click="select('less_than_equal')">Менше або рівно</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.LESS_THAN_EQUAL }">
+        <div @click="select(Condition.LESS_THAN_EQUAL)">Менше або рівно</div>
       </li>
     </template>
     <template v-else-if="column.type === 'date'">
-      <li class="dropdown-item" :class="{ active: column.condition === 'equal' }">
-        <div @click="select('equal')">Рівно</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.EQUAL }">
+        <div @click="select(Condition.EQUAL)">Рівно</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'not_equal' }">
-        <div @click="select('not_equal')">Не рівно</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.NOT_EQUAL }">
+        <div @click="select(Condition.NOT_EQUAL)">Не рівно</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'greater_than' }">
-        <div @click="select('greater_than')">Старіші за</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.GREATER_THAN }">
+        <div @click="select(Condition.GREATER_THAN)">Старіші за</div>
       </li>
-      <li class="dropdown-item" :class="{ active: column.condition === 'less_than' }">
-        <div @click="select('less_than')">Новіші за</div>
+      <li class="dropdown-item" :class="{ active: column.condition === Condition.LESS_THAN }">
+        <div @click="select(Condition.LESS_THAN)">Новіші за</div>
       </li>
     </template>
-    <li class="dropdown-item" :class="{ active: column.condition === 'is_null' }">
-      <div @click="select('is_null')">Порожні</div>
+    <li class="dropdown-item" :class="{ active: column.condition === Condition.IS_EMPTY }">
+      <div @click="select(Condition.IS_EMPTY)">Порожні</div>
     </li>
-    <li class="dropdown-item" :class="{ active: column.condition === 'is_not_null' }">
-      <div @click="select('is_not_null')">Не порожні</div>
+    <li class="dropdown-item" :class="{ active: column.condition === Condition.IS_NOT_EMPTY }">
+      <div @click="select(Condition.IS_NOT_EMPTY)">Не порожні</div>
     </li>
   </ul>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onBeforeUnmount, reactive, PropType } from 'vue';
+import {defineComponent, onMounted, onBeforeUnmount, PropType} from 'vue';
+import Condition from "@/types/condition";
 
 interface Column {
   condition: string;
@@ -77,6 +78,11 @@ interface Column {
 
 export default defineComponent({
   name: 'FilterComponent',
+  computed: {
+    Condition() {
+      return Condition
+    }
+  },
   props: {
     column: {
       type: Object as PropType<Column>,
@@ -84,7 +90,7 @@ export default defineComponent({
     },
   },
   emits: ['close', 'filterChange'],
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const close = () => {
       emit('close');
     };

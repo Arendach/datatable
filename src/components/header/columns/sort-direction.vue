@@ -17,9 +17,9 @@
 
 <script setup lang="ts">
 defineProps({
-  sortable: {type: Boolean, default: false,},
-  column: {type: Object,},
-  sortColumn: {type: String,},
-  sortDirection: {type: String,},
+  sortable: {type: Boolean, default: false, required: true},
+  column: {type: Object, required: true},
+  sortColumn: {type: String, required: true},
+  sortDirection: {type: String, required: true},
 })
 </script>

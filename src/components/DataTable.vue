@@ -13,7 +13,7 @@
     </table>
   </div>
 
-<!--  <display-pagination/>-->
+  <!--  <display-pagination/>-->
 </template>
 
 <script setup lang="ts">
@@ -25,7 +25,10 @@ import DisplayTbody from "@/components/body/display-tbody.vue"
 import DisplayThead from "@/components/header/display-thead.vue"
 import DisplayTfoot from "@/components/footer/display-tfoot.vue"
 import DisplayPagination from "@/components/pagination/display-pagination.vue"
-import {Column, ColumnType} from "@/types/datatable-props/column"
+import {Column} from "@/types/column"
+import ColumnType from "@/types/column-type"
+import useFilterStore from "@/stores/filter-store"
+import useUniqueIdStore from "@/stores/unique-id-store"
 
 
 const props = defineProps<DataTableProps>()
@@ -46,6 +49,9 @@ props.columns.map((item: Column) => {
   return item
 })
 
+const uniqueId = useUniqueIdStore()
+if (typeof props.uniqueId !== 'undefined') uniqueId.setUniqueId(props.uniqueId)
+
 // dataTableStore
 const dataTableStore = useDataTableStore()
 dataTableStore.setColumns(props.columns)
@@ -63,85 +69,20 @@ if (typeof props.hasAutoListing !== 'undefined') representationStore.setHasAutoL
 if (typeof props.hasCheckbox) representationStore.setHasCheckbox(props.hasCheckbox)
 if (typeof props.cloneHeaderInFooter) representationStore.setCloneHeaderInFooter(props.cloneHeaderInFooter)
 
+// filterStore
+const filterStore = useFilterStore()
+if (typeof props.search !== 'undefined') filterStore.setSearch(props.search)
+if (typeof props.useSorting !== 'undefined') filterStore.setUseSorting(props.useSorting)
+if (typeof props.sortColumn !== 'undefined') filterStore.setSortColumn(props.sortColumn)
+if (typeof props.sortDirection !== 'undefined') filterStore.setSortDirection(props.sortDirection)
+if (typeof props.useFiltering !== 'undefined') filterStore.setUseFiltering(props.useFiltering)
+if (typeof props.useSelectRowOnClick !== 'undefined') filterStore.setUseSelectRowOnClick(props.useSelectRowOnClick)
+if (typeof props.usePersistSelection !== 'undefined') filterStore.setUsePersistSelection(props.usePersistSelection)
+if (typeof props.sortColumn !== 'undefined') filterStore.setCurrentSortColumn(props.sortColumn)
+if (typeof props.sortDirection !== 'undefined') filterStore.setCurrentSortDirection(props.sortDirection)
 
-/*export default {
-  name: 'DataTable',
-  components: {
-    TableHeader,
-    RenderDate,
-    RenderBoolean,
-    columnHeader,
-    Pagination,
-  },
-  mixins: [mixins,],
-  beforeMount() {
-
-
-    // paginate
-    if (this.totalRows) {
-      this.paginateStore.setTotalRows(this.totalRows)
-    }
-
-    if (this.page) {
-      this.paginateStore.setPage(this.page)
-    }
-
-    if (this.pageSize) {
-      this.paginateStore.setPageSize(this.pageSize)
-    }
-
-    if (this.pageSizeOptions) {
-      this.paginateStore.setPageSizeOptions(this.pageSizeOptions)
-    }
-
-    if (this.usePageSize) {
-      this.paginateStore.setUsePageSize(this.usePageSize)
-    }
-
-    if (typeof this.usePagination !== 'undefined') {
-      this.paginateStore.setUsePagination(this.usePagination)
-    }
-
-    if (this.isShowNumbers) {
-      this.paginateStore.setIsShowNumbers(this.isShowNumbers)
-    }
-
-    if (this.isShowNumbersCount) {
-      this.paginateStore.setIsShowNumbersCount(this.isShowNumbersCount)
-    }
-
-    if (this.isShowFirstPage) {
-      this.paginateStore.setIsShowFirstPage(this.isShowFirstPage)
-    }
-
-    if (this.isShowLastPage) {
-      this.paginateStore.setIsShowLastPage(this.isShowLastPage)
-    }
-
-    if (this.firstArrow) {
-      this.paginateStore.setFirstArrow(this.firstArrow)
-    }
-
-    if (this.lastArrow) {
-      this.paginateStore.setLastArrow(this.lastArrow)
-    }
-
-    if (this.nextArrow) {
-      this.paginateStore.setNextArrow(this.nextArrow)
-    }
-
-    if (this.previousArrow) {
-      this.paginateStore.setPreviousArrow(this.previousArrow)
-    }
-
-    if (this.paginationInfo) {
-      this.paginateStore.setPaginationInfo(this.paginationInfo)
-    }
-
-    if (this.noDataContent) {
-      this.paginateStore.setNoDataContent(this.noDataContent)
-    }
-
+/*
+export default {
     this.setDefaultColumns()
     this.loadSelectedColumns()
   },
@@ -255,26 +196,7 @@ if (typeof props.cloneHeaderInFooter) representationStore.setCloneHeaderInFooter
         }
       }
     },
-    sortChange(field) {
-      let direction = 'asc'
-      if (field === this.currentSortColumn && this.currentSortDirection === 'asc') direction = 'desc'
-
-      let offset = (this.currentPage - 1) * this.currentPageSize
-      let limit = this.currentPageSize
-      this.currentSortColumn = field
-      this.currentSortDirection = direction
-
-      if (!this.persistSelection) {
-        this.selectAll(false)
-      }
-      this.filterRows()
-
-      if (this.isServerMode) {
-        this.changeForServer('sort')
-      } else {
-        this.$emit('sortChange', {offset, limit, field, direction})
-      }
-    },
+    ,
     applyFilters() {
       this.filterItems = this.rows.filter((row) => {
         return this.columns.every((column) => {
@@ -712,33 +634,9 @@ if (typeof props.cloneHeaderInFooter) representationStore.setCloneHeaderInFooter
       this.selectAll(false)
       this.filterRows()
     },
-    setDefaultColumns() {
-      this.columns.map((item) => {
-        const type = item.type?.toLowerCase() || 'string'
-        item.type = type
-        item.isUnique = item.isUnique !== undefined ? item.isUnique : false
-        item.show = item.show !== undefined ? item.show : true
-        item.filter = item.filter !== undefined ? item.filter : false
-        item.search = item.search !== undefined ? item.search : false
-        item.sort = item.sort !== undefined ? item.sort : false
-        item.html = item.html !== undefined ? item.html : false
-        item.condition = !type || type === 'string' ? 'contain' : 'equal'
-        item.exportable = item.exportable !== undefined ? item.exportable : true
-        item.selectable = item.selectable !== undefined ? item.selectable : false
-
-        return item
-      })
     },
 
   },
 }*/
 </script>
 
-<style>
-.no-data {
-  text-align: center;
-  height: 100px;
-  vertical-align: middle;
-  font-weight: bold;
-}
-</style>

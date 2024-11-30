@@ -14,6 +14,8 @@ const useFilterStore = defineStore('filter', {
         useFiltering: false as Boolean,
         useSelectRowOnClick: false as Boolean,
         usePersistSelection: false as Boolean,
+        currentSortColumn: '' as String,
+        currentSortDirection: '' as String,
     }),
     actions: {
         setSearch(search: String): void {
@@ -36,6 +38,12 @@ const useFilterStore = defineStore('filter', {
         },
         setUsePersistSelection(usePersistSelection: Boolean): void {
             this.$state.usePersistSelection = usePersistSelection
+        },
+        setCurrentSortColumn(sortColumn: string): void {
+            this.currentSortColumn = sortColumn
+        },
+        setCurrentSortDirection(sortDirection: string): void {
+            this.currentSortDirection = sortDirection
         },
     }
 })

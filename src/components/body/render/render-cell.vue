@@ -37,7 +37,8 @@
 import displayCellValue from "@/utility/display-cell-value"
 import RenderBoolean from "@/components/body/render/boolean.vue"
 import RenderDate from "@/components/body/render/date.vue"
-import {Column, ColumnType} from "@/types/datatable-props/column"
+import {Column} from "@/types/column"
+import ColumnType from "@/types/column-type"
 import useRepresentationStore from "@/stores/representation-store"
 
 const representation = useRepresentationStore()

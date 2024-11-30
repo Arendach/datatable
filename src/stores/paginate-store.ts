@@ -1,23 +1,23 @@
-import {defineStore} from 'pinia';
+import {defineStore} from 'pinia'
 
 // Типізація стану
 interface PaginationState {
-    totalRows: number;
-    page: number;
-    pageSize: number;
-    pageSizeOptions: number[];
-    usePageSize: boolean;
-    usePagination: boolean;
-    isShowNumbers: boolean;
-    isShowNumbersCount: boolean;
-    isShowFirstPage: boolean;
-    isShowLastPage: boolean;
-    firstArrow: string;
-    lastArrow: string;
-    nextArrow: string;
-    previousArrow: string;
-    paginationInfo: string;
-    noDataContent: string;
+    totalRows: number
+    page: number
+    pageSize: number
+    pageSizeOptions: number[]
+    usePageSize: boolean
+    usePagination: boolean
+    isShowNumbers: boolean
+    isShowNumbersCount: boolean
+    isShowFirstPage: boolean
+    isShowLastPage: boolean
+    firstArrow: string
+    lastArrow: string
+    nextArrow: string
+    previousArrow: string
+    paginationInfo: string
+    noDataContent: string
 }
 
 const usePaginateStore = defineStore('paginate', {
@@ -42,52 +42,52 @@ const usePaginateStore = defineStore('paginate', {
 
     actions: {
         setTotalRows(totalRows: number): void {
-            this.totalRows = totalRows;
+            this.totalRows = totalRows
         },
         setPage(page: number): void {
-            this.page = page;
+            this.page = page
         },
         setPageSize(pageSize: number): void {
-            this.pageSize = pageSize;
+            this.pageSize = pageSize
         },
         setPageSizeOptions(pageSizeOptions: number[]): void {
-            this.pageSizeOptions = pageSizeOptions;
+            this.pageSizeOptions = pageSizeOptions
         },
         setUsePageSize(usePageSize: boolean): void {
-            this.usePageSize = usePageSize;
+            this.usePageSize = usePageSize
         },
         setUsePagination(usePagination: boolean): void {
-            this.usePagination = usePagination;
+            this.usePagination = usePagination
         },
         setIsShowNumbers(isShowNumbers: boolean): void {
-            this.isShowNumbers = isShowNumbers;
+            this.isShowNumbers = isShowNumbers
         },
         setIsShowNumbersCount(isShowNumbersCount: boolean): void {
-            this.isShowNumbersCount = isShowNumbersCount;
+            this.isShowNumbersCount = isShowNumbersCount
         },
         setIsShowFirstPage(isShowFirstPage: boolean): void {
-            this.isShowFirstPage = isShowFirstPage;
+            this.isShowFirstPage = isShowFirstPage
         },
         setIsShowLastPage(isShowLastPage: boolean): void {
-            this.isShowLastPage = isShowLastPage;
+            this.isShowLastPage = isShowLastPage
         },
         setFirstArrow(firstArrow: string): void {
-            this.firstArrow = firstArrow;
+            this.firstArrow = firstArrow
         },
         setLastArrow(lastArrow: string): void {
-            this.lastArrow = lastArrow;
+            this.lastArrow = lastArrow
         },
         setNextArrow(nextArrow: string): void {
-            this.nextArrow = nextArrow;
+            this.nextArrow = nextArrow
         },
         setPreviousArrow(previousArrow: string): void {
-            this.previousArrow = previousArrow;
+            this.previousArrow = previousArrow
         },
         setPaginationInfo(paginationInfo: string): void {
-            this.paginationInfo = paginationInfo;
+            this.paginationInfo = paginationInfo
         },
         setNoDataContent(noDataContent: string): void {
-            this.noDataContent = noDataContent;
+            this.noDataContent = noDataContent
         },
     },
 })

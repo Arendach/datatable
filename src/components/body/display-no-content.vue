@@ -16,3 +16,13 @@ const paginate = usePaginateStore()
 const countColumns = useColumnCount()
 
 </script>
+
+<style>
+.no-data {
+  text-align: center;
+  height: 100px;
+  vertical-align: middle;
+  font-weight: bold;
+}
+</style>
+

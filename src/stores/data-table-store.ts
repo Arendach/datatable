@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
-import {Column} from "@/types/datatable-props/column"
+import {Column} from "@/types/column"
+import getFilteredRows from "@/filter/native"
 
 const useDataTableStore = defineStore('dataTable', {
     state: () => ({
@@ -9,8 +10,8 @@ const useDataTableStore = defineStore('dataTable', {
         selected: [] as number[],
     }),
     getters: {
-        filterRowCount: (state) => state.rows.length,
-        filterItems: (state) => state.rows,
+        filterRowCount: () => getFilteredRows().length,
+        filterItems: () => getFilteredRows(),
     },
     actions: {
         setColumns(columns: Column[]): void {

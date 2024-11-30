@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 
-type UiClass = Array<string> | null | Function | String;
+type UiClass = Array<string> | null | Function | String
 
 const useRepresentationStore = defineStore('representation', {
     state: () => ({

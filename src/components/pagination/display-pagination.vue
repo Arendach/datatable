@@ -13,18 +13,11 @@
       </div>
 
       <div class="bh-pagination-number sm:bh-ml-auto bh-inline-flex bh-items-center bh-space-x-1">
-        <button v-if="showFirstPage" type="button" class="bh-page-item first-page"
-                :class="{ disabled: currentPage <= 1 }" @click="currentPage = 1">
+        <button v-if="showFirstPage" type="button" class="bh-page-item first-page" :class="{ disabled: currentPage <= 1 }" @click="currentPage = 1">
           <span v-if="firstArrow" v-html="firstArrow"></span>
-          <svg v-else aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
-            <g fill="currentColor" fill-rule="evenodd">
-              <path
-                  d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-              <path
-                  d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-            </g>
-          </svg>
+          <img v-else :src="firstArrowSVG" alt="firstArrow">
         </button>
+
         <button type="button" class="bh-page-item previous-page" :class="{ disabled: currentPage <= 1 }"
                 @click="previousPage">
           <span v-if="previousArrow" v-html="previousArrow"> </span>
@@ -62,17 +55,9 @@
           </svg>
         </button>
 
-        <button v-if="showLastPage" type="button" class="bh-page-item last-page"
-                :class="{ disabled: currentPage >= maxPage }" @click="currentPage = maxPage">
+        <button v-if="showLastPage" type="button" class="bh-page-item last-page" :class="{ disabled: currentPage >= maxPage }" @click="currentPage = maxPage">
           <span v-if="lastArrow" v-html="lastArrow"> </span>
-          <svg v-else aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
-            <g fill="currentColor" fill-rule="evenodd">
-              <path
-                  d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8L3.646 2.354a.5.5 0 0 1 0-.708z"/>
-              <path
-                  d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8L7.646 2.354a.5.5 0 0 1 0-.708z"/>
-            </g>
-          </svg>
+          <img :src="lastArrowSVG" alt="lastArrow">
         </button>
       </div>
     </div>
@@ -80,5 +65,6 @@
 </template>
 
 <script setup>
-
+import firstArrowSVG from '@/assets/images/first-arrow.svg'
+import lastArrowSVG from '@/assets/images/last-arrow.svg'
 </script>

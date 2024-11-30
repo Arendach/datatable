@@ -1,6 +1,6 @@
 import {computed} from "vue"
 import useDataTableStore from "@/stores/data-table-store"
-import {Column} from "@/types/datatable-props/column"
+import {Column} from "@/types/column"
 
 export function useUniqueKey() {
     const dataTable = useDataTableStore()

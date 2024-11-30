@@ -20,7 +20,7 @@ function tableToJson(table: any) {
     for (let j = 0; j < tableRow.cells.length; j++) {
       let cell = tableRow.cells[j]
       if (!cell.classList.contains('exportable')) continue
-      rowData.push(tableRow.cells[j].innerText);
+      rowData.push(tableRow.cells[j].innerText)
     }
 
     data.push(rowData)
