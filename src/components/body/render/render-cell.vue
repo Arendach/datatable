@@ -9,8 +9,10 @@
       ]"
   >
     <!-- Slot render -->
-    <template v-if="$slots[column.field]">
-      <slot :name="column.field" :value="item"></slot>
+    <template v-if="slots.hasSlot(column.field)">
+      <template v-for="(node, index) in slots.getSlot(column.field)({value: item})" :key="index">
+        <component :is="node"/>
+      </template>
     </template>
 
     <!-- Callback column render -->
@@ -40,13 +42,16 @@ import RenderDate from "@/components/body/render/date.vue"
 import {Column} from "@/types/column"
 import ColumnType from "@/types/column-type"
 import useRepresentationStore from "@/stores/representation-store"
-
-const representation = useRepresentationStore()
-
-const cellClass = representation.cellClass
+import useSlotsStore from "@/stores/slots-store";
 
 defineProps<{
   column: Column,
   item: Object
 }>()
+
+const representation = useRepresentationStore()
+const slots = useSlotsStore()
+
+const cellClass = representation.cellClass
+
 </script>

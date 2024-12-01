@@ -24,12 +24,13 @@ import {DataTableProps} from "@/types/datatable-props"
 import DisplayTbody from "@/components/body/display-tbody.vue"
 import DisplayThead from "@/components/header/display-thead.vue"
 import DisplayTfoot from "@/components/footer/display-tfoot.vue"
-import DisplayPagination from "@/components/pagination/display-pagination.vue"
 import {Column} from "@/types/column"
 import ColumnType from "@/types/column-type"
 import useFilterStore from "@/stores/filter-store"
 import useUniqueIdStore from "@/stores/unique-id-store"
-
+import Condition from "@/types/condition"
+import {onMounted, useSlots} from "vue"
+import useSlotsStore from "@/stores/slots-store";
 
 const props = defineProps<DataTableProps>()
 
@@ -42,13 +43,14 @@ props.columns.map((item: Column) => {
   item.search = item.search !== undefined ? item.search : false
   item.sort = item.sort !== undefined ? item.sort : false
   item.html = item.html !== undefined ? item.html : false
-  item.condition = !type || type === 'string' ? 'contain' : 'equal'
+  item.condition = !type || type === 'string' ? Condition.CONTAIN : Condition.EQUAL
   item.exportable = item.exportable !== undefined ? item.exportable : true
   item.selectable = item.selectable !== undefined ? item.selectable : false
 
   return item
 })
 
+// uniqueIdStore
 const uniqueId = useUniqueIdStore()
 if (typeof props.uniqueId !== 'undefined') uniqueId.setUniqueId(props.uniqueId)
 
@@ -80,6 +82,11 @@ if (typeof props.useSelectRowOnClick !== 'undefined') filterStore.setUseSelectRo
 if (typeof props.usePersistSelection !== 'undefined') filterStore.setUsePersistSelection(props.usePersistSelection)
 if (typeof props.sortColumn !== 'undefined') filterStore.setCurrentSortColumn(props.sortColumn)
 if (typeof props.sortDirection !== 'undefined') filterStore.setCurrentSortDirection(props.sortDirection)
+
+// set slots to global store
+const slotsStore = useSlotsStore()
+slotsStore.setSlots(useSlots())
+
 
 /*
 export default {
