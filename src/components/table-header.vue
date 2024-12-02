@@ -1,34 +1,60 @@
 <template>
   <div class="container-fluid">
-    <div class="row" style="padding: 10px; border: 1px solid #ccc; border-bottom: none">
+    <div class="row p-2 border border border-1 border-bottom-0">
+      <!-- Перша колонка -->
       <div class="col">
         <slot name="control"></slot>
       </div>
-      <div class="col" style="text-align: right">
+
+      <!-- Друга колонка -->
+      <div class="col d-flex align-items-center gap-2">
+        <!-- Поле для пошуку -->
+        <div class="input-group input-group-sm flex-grow-1">
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            placeholder="Please enter text to filter"
+            v-model="filter.search"
+          >
+          <button class="btn btn-outline-secondary" type="button">Search</button>
+        </div>
+
         <!-- Вибір колонок -->
-        <div class="btn-group btn-group-sm" style="margin-right: 10px;">
-          <button type="button" class="btn btn-outline-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">
-            <i class="fa fa-eye"></i>
+        <div class="btn-group">
+          <button
+            type="button"
+            class="btn btn-outline-primary dropdown-toggle btn-sm"
+            data-bs-toggle="dropdown"
+          >
+            Columns
           </button>
           <ul class="dropdown-menu">
             <li class="dropdown-item">
               <input type="checkbox" v-model="hasAutoListing">
-              <span style="margin-left: 5px;">№ з/п</span>
+              <span class="ms-2">№ з/п</span>
             </li>
             <li class="dropdown-item">
               <input type="checkbox" v-model="hasCheckbox">
-              <span style="margin-left: 5px;">Чекбокс</span>
+              <span class="ms-2">Чекбокс</span>
             </li>
-            <li v-for="column in dataTable.columns" class="dropdown-item">
+            <li
+              v-for="column in dataTable.columns"
+              :key="column.field"
+              class="dropdown-item"
+            >
               <input type="checkbox" v-model="column.show">
-              <span style="margin-left: 5px;" v-text="column.title"></span>
+              <span class="ms-2" v-text="column.title"></span>
             </li>
           </ul>
         </div>
 
-        <!-- Експорт в ЕКСЕЛЬ-->
-        <button @click="exportToEXCEL" title="Експортувати в EXCEL" class="btn btn-outline-success btn-sm">
-          <img :src="excelImage" alt="excel image" height="20px">
+        <!-- Експорт в Excel -->
+        <button
+          @click="exportToEXCEL"
+          title="Експортувати в EXCEL"
+          class="btn btn-outline-success btn-sm"
+        >
+          Export
         </button>
       </div>
     </div>
@@ -38,22 +64,21 @@
 <script setup lang="ts">
 import useDataTableStore from "@/stores/data-table-store"
 import useRepresentationStore from "@/stores/representation-store"
-import {ref, watch} from "vue"
+import useFilterStore from "@/stores/filter-store"
+import { ref, watch } from "vue"
 import exportToEXCEL from "@/utility/export-to-excel"
-import excelImage from '@/assets/images/excel.svg'
+import excelImage from "@/assets/images/excel.svg"
 
+// Стан таблиці
 const dataTable = useDataTableStore()
 const representation = useRepresentationStore()
+const filter = useFilterStore()
 
+// Стан чекбоксів
 const hasCheckbox = ref(representation.hasCheckbox)
 const hasAutoListing = ref(representation.hasAutoListing)
 
-watch(hasCheckbox, (value: Boolean) => {
-  representation.setHasCheckbox(value)
-})
-
-watch(hasAutoListing, (value: Boolean) => {
-  representation.setHasAutoListing(value)
-})
-
+// Синхронізація стану чекбоксів з глобальним сховищем
+watch(hasCheckbox, (value) => representation.setHasCheckbox(value))
+watch(hasAutoListing, (value) => representation.setHasAutoListing(value))
 </script>

@@ -15,20 +15,23 @@
           @click="column.sort && filter.useSorting ? sortChange(column.field) : null"
         >
           <div v-if="column.selectable" class="form-check">
-            <input class="form-check-input" type="checkbox" :value="column" v-model="selectedColumns" @click.stop/>
+            <input class="form-check-input" type="checkbox" :value="column.field" v-model="selectedColumns" @click.stop/>
             <label class="form-check-label">{{ column.title }}</label>
+            <sort-direction
+              :column="column"
+              :sortable="filter.useSorting"
+              :sort-column="filter.currentSortColumn"
+              :sort-direction="filter.currentSortDirection"/>
           </div>
 
           <div v-else>
             {{ column.title }}
+            <sort-direction
+              :column="column"
+              :sortable="filter.useSorting"
+              :sort-column="filter.currentSortColumn"
+              :sort-direction="filter.currentSortDirection"/>
           </div>
-
-          <sort-direction
-            :column="column"
-            :sortable="filter.useSorting"
-            :sort-column="filter.currentSortColumn"
-            :sort-direction="filter.currentSortDirection"
-          />
         </div>
       </th>
     </template>
@@ -55,14 +58,22 @@ const toggleSelectAll = () => {
 }
 
 const sortChange = function (field: string) {
-  let direction = 'asc'
-  if (field === filter.currentSortColumn && filter.currentSortDirection === 'asc') {
-    direction = 'desc'
+  if (field !== filter.currentSortColumn) {
+    filter.currentSortColumn = field
+    filter.currentSortDirection = 'asc'
+    return
   }
 
-  filter.currentSortColumn = field
-  filter.currentSortDirection = direction
+  if (filter.currentSortDirection === 'asc') {
+    filter.currentSortDirection = 'desc'
+  } else if (filter.currentSortDirection === 'desc') {
+    filter.currentSortDirection = null
+    filter.currentSortColumn = null
+  } else {
+    filter.currentSortDirection = 'asc'
+  }
 }
+
 
 const getColumnClasses = (column: Column) => [
   filter.useSorting && column.sort ? 'bh-cursor-pointer' : '',
