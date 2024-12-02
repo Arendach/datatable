@@ -42,7 +42,7 @@ import RenderDate from "@/components/body/render/date.vue"
 import {Column} from "@/types/column"
 import ColumnType from "@/types/column-type"
 import useRepresentationStore from "@/stores/representation-store"
-import useSlotsStore from "@/stores/slots-store";
+import useSlotsStore from "@/stores/slots-store"
 
 defineProps<{
   column: Column,

@@ -4,14 +4,14 @@ import sorting from "@/filter/native/sorting"
 import filtering from "@/filter/native/filter"
 
 function getFilteredRows() {
-    const dataTable = useDataTableStore()
-    let rows = dataTable.rows
+  const dataTable = useDataTableStore()
+  let rows = dataTable.rows
 
-    rows = filtering(rows)
-    rows = searching(rows)
-    rows = sorting(rows)
+  rows = filtering(rows)
+  rows = searching(rows)
+  rows = sorting(rows)
 
-    return rows
+  return rows
 }
 
 export default getFilteredRows

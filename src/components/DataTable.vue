@@ -13,7 +13,7 @@
     </table>
   </div>
 
-  <!--  <display-pagination/>-->
+  <display-pagination/>
 </template>
 
 <script setup lang="ts">
@@ -29,8 +29,10 @@ import ColumnType from "@/types/column-type"
 import useFilterStore from "@/stores/filter-store"
 import useUniqueIdStore from "@/stores/unique-id-store"
 import Condition from "@/types/condition"
-import {onMounted, useSlots} from "vue"
-import useSlotsStore from "@/stores/slots-store";
+import {useSlots} from "vue"
+import useSlotsStore from "@/stores/slots-store"
+import DisplayPagination from "@/components/pagination/display-pagination.vue"
+import usePaginateStore from "@/stores/paginate-store"
 
 const props = defineProps<DataTableProps>()
 
@@ -83,9 +85,26 @@ if (typeof props.usePersistSelection !== 'undefined') filterStore.setUsePersistS
 if (typeof props.sortColumn !== 'undefined') filterStore.setCurrentSortColumn(props.sortColumn)
 if (typeof props.sortDirection !== 'undefined') filterStore.setCurrentSortDirection(props.sortDirection)
 
+const paginateStore = usePaginateStore()
+if (typeof props.totalRows !== 'undefined') paginateStore.setTotalRows(props.totalRows)
+if (typeof props.page !== 'undefined') paginateStore.setPage(props.page)
+if (typeof props.pageSize !== 'undefined') paginateStore.setPageSize(props.pageSize)
+if (typeof props.pageSizeOptions !== 'undefined') paginateStore.setPageSizeOptions(props.pageSizeOptions)
+if (typeof props.usePageSize !== 'undefined') paginateStore.setUsePageSize(props.usePageSize)
+if (typeof props.usePagination !== 'undefined') paginateStore.setUsePagination(props.usePagination)
+if (typeof props.isShowNumbers !== 'undefined') paginateStore.setIsShowNumbers(props.isShowNumbers)
+if (typeof props.showNumbersCount !== 'undefined') paginateStore.setShowNumbersCount(props.showNumbersCount)
+if (typeof props.firstArrow !== 'undefined') paginateStore.setFirstArrow(props.firstArrow)
+if (typeof props.lastArrow !== 'undefined') paginateStore.setLastArrow(props.lastArrow)
+if (typeof props.nextArrow !== 'undefined') paginateStore.setNextArrow(props.nextArrow)
+if (typeof props.previousArrow !== 'undefined') paginateStore.setPreviousArrow(props.previousArrow)
+if (typeof props.paginationInfo !== 'undefined') paginateStore.setPaginationInfo(props.paginationInfo)
+if (typeof props.noDataContent !== 'undefined') paginateStore.setNoDataContent(props.noDataContent)
+
 // set slots to global store
 const slotsStore = useSlotsStore()
 slotsStore.setSlots(useSlots())
+</script>
 
 
 /*
@@ -120,39 +139,7 @@ export default {
     }
   },
   computed: {
-    offset() {
-      return (this.currentPage - 1) * this.currentPageSize + 1
-    },
-    limit() {
-      let limit = this.currentPage * this.currentPageSize
 
-      return this.filterRowCount >= limit ? limit : this.filterRowCount
-    },
-    maxPage() {
-      const totalPages = this.currentPageSize < 1 ? 1 : Math.ceil(this.filterRowCount / this.currentPageSize)
-
-      return Math.max(totalPages || 0, 1)
-    },
-    paging() {
-      let startPage, endPage
-      let isMaxSized = typeof this.showNumbersCount !== 'undefined' && this.showNumbersCount < this.maxPage
-      if (isMaxSized) {
-        // Current page is displayed in the middle of the visible ones
-        startPage = Math.max(this.currentPage - Math.floor(this.showNumbersCount / 2), 1);
-        endPage = startPage + this.showNumbersCount - 1
-
-        // Adjust if limit is exceeded
-        if (endPage > this.maxPage) {
-          endPage = this.maxPage
-          startPage = endPage - this.showNumbersCount + 1;
-        }
-      } else {
-        startPage = 1
-        endPage = this.maxPage
-      }
-
-      return Array.from(Array(endPage + 1 - startPage).keys()).map((i) => startPage + i)
-    },
     storage() {
       return store2.local.namespace(this.uniqueId)
     },
@@ -645,5 +632,4 @@ export default {
 
   },
 }*/
-</script>
 

@@ -1,119 +1,57 @@
 <template>
-  <ul class="dropdown-menu dropdown-menu-sm-end" @click="close">
+  <ul class="dropdown-menu dropdown-menu-sm-end">
     <li class="dropdown-item" :class="{ active: column.condition === Condition.WITHOUT }">
       <div @click="select(Condition.WITHOUT)">Без фільтра</div>
     </li>
-    <template v-if="column.type === 'string'">
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.CONTAIN }">
-        <div @click="select(Condition.CONTAIN)">Містить</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.NOT_CONTAIN }">
-        <div @click="select(Condition.NOT_CONTAIN)">Не містить</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.EQUAL }">
-        <div @click="select(Condition.EQUAL)">Рівно</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.NOT_EQUAL }">
-        <div @click="select(Condition.NOT_EQUAL)">Не рівно</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.START_WITH }">
-        <div @click="select(Condition.START_WITH)">Починається з</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.END_WITH }">
-        <div @click="select(Condition.END_WITH)">Закінчується на</div>
+    <template v-for="(label, condition) in conditions[column.type || 'default']" :key="condition">
+      <li class="dropdown-item" :class="{ active: column.condition === condition }">
+        <div @click="select(condition)">{{ label }}</div>
       </li>
     </template>
-    <template v-else-if="column.type === 'number'">
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.EQUAL }">
-        <div @click="select(Condition.EQUAL)">Рівно</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.NOT_EQUAL }">
-        <div @click="select(Condition.NOT_EQUAL)">Не рівно</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.GREATER_THAN }">
-        <div @click="select(Condition.GREATER_THAN)">Більше ніж</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.GREATER_THAN_EQUAL }">
-        <div @click="select(Condition.GREATER_THAN_EQUAL)">Більше або рівно</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.LESS_THAN }">
-        <div @click="select(Condition.LESS_THAN)">Менше ніж</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.LESS_THAN_EQUAL }">
-        <div @click="select(Condition.LESS_THAN_EQUAL)">Менше або рівно</div>
-      </li>
-    </template>
-    <template v-else-if="column.type === 'date'">
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.EQUAL }">
-        <div @click="select(Condition.EQUAL)">Рівно</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.NOT_EQUAL }">
-        <div @click="select(Condition.NOT_EQUAL)">Не рівно</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.GREATER_THAN }">
-        <div @click="select(Condition.GREATER_THAN)">Старіші за</div>
-      </li>
-      <li class="dropdown-item" :class="{ active: column.condition === Condition.LESS_THAN }">
-        <div @click="select(Condition.LESS_THAN)">Новіші за</div>
-      </li>
-    </template>
-    <li class="dropdown-item" :class="{ active: column.condition === Condition.IS_EMPTY }">
-      <div @click="select(Condition.IS_EMPTY)">Порожні</div>
-    </li>
-    <li class="dropdown-item" :class="{ active: column.condition === Condition.IS_NOT_EMPTY }">
-      <div @click="select(Condition.IS_NOT_EMPTY)">Не порожні</div>
-    </li>
   </ul>
 </template>
 
-<script lang="ts">
-import {defineComponent, onMounted, onBeforeUnmount, PropType} from 'vue';
-import Condition from "@/types/condition";
+<script setup lang="ts">
+import {reactive} from 'vue'
+import Condition from "@/types/condition"
+import {Column} from "@/types/column"
 
-interface Column {
-  condition: string;
-  value: string;
-  type: string;
+const conditions = reactive({
+  default: {
+    [Condition.IS_EMPTY]: 'Порожні',
+    [Condition.IS_NOT_EMPTY]: 'Не порожні',
+  },
+  string: {
+    [Condition.CONTAIN]: 'Містить',
+    [Condition.NOT_CONTAIN]: 'Не містить',
+    [Condition.EQUAL]: 'Рівно',
+    [Condition.NOT_EQUAL]: 'Не рівно',
+    [Condition.START_WITH]: 'Починається з',
+    [Condition.END_WITH]: 'Закінчується на',
+  },
+  number: {
+    [Condition.EQUAL]: 'Рівно',
+    [Condition.NOT_EQUAL]: 'Не рівно',
+    [Condition.GREATER_THAN]: 'Більше ніж',
+    [Condition.GREATER_THAN_EQUAL]: 'Більше або рівно',
+    [Condition.LESS_THAN]: 'Менше ніж',
+    [Condition.LESS_THAN_EQUAL]: 'Менше або рівно',
+  },
+  date: {
+    [Condition.EQUAL]: 'Рівно',
+    [Condition.NOT_EQUAL]: 'Не рівно',
+    [Condition.GREATER_THAN]: 'Старіші за',
+    [Condition.LESS_THAN]: 'Новіші за',
+  },
+})
+
+const props = defineProps<{ column: Column }>()
+
+const select = (condition: Condition) => {
+  props.column.condition = condition
+
+  if (condition === Condition.WITHOUT) {
+    props.column.filterValue = ''
+  }
 }
-
-export default defineComponent({
-  name: 'FilterComponent',
-  computed: {
-    Condition() {
-      return Condition
-    }
-  },
-  props: {
-    column: {
-      type: Object as PropType<Column>,
-      required: true,
-    },
-  },
-  emits: ['close', 'filterChange'],
-  setup(props, {emit}) {
-    const close = () => {
-      emit('close');
-    };
-
-    const select = (condition: string) => {
-      props.column.condition = condition;
-      if (condition === '') props.column.value = '';
-
-      emit('filterChange', props.column);
-    };
-
-    onMounted(() => {
-      document.addEventListener('click', close);
-    });
-
-    onBeforeUnmount(() => {
-      document.removeEventListener('click', close);
-    });
-
-    return {
-      close,
-      select,
-    };
-  },
-});
 </script>

@@ -1,47 +1,55 @@
 <template>
   <tr class="exportable">
+    <!-- Колонка для авто-лістингу -->
     <th v-if="representation.hasAutoListing" class="centered exportable">№</th>
+
+    <!-- Колонка для чекбоксів -->
     <th v-if="representation.hasCheckbox" class="centered">
       <div class="form-check">
-        <input class="form-check-input" v-model="checkAll" ref="selectedAll" type="checkbox"/>
+        <input
+            class="form-check-input"
+            v-model="checkAll"
+            type="checkbox"
+            ref="selectedAll"
+        />
       </div>
     </th>
-    <template v-for="col in dataTable.columns">
+
+    <!-- Динамічні колонки -->
+    <template v-for="column in dataTable.columns" :key="column.field">
       <th
-          v-if="col.show"
-          :key="col.field"
-          :class="[
-            filter.useSorting && col.sort ? 'bh-cursor-pointer' : '',
-            col.position ? col.position : '',
-            col.exportable ? 'exportable' : '',
-            col.className ? col.className : '',
-          ]"
-          :style="{
-            width: col.width,
-            'min-width': col.minWidth,
-            'max-width': col.maxWidth,
-          }"
+          v-if="column.show"
+          :class="getColumnClasses(column)"
+          :style="getColumnStyles(column)"
       >
-        <div :class="[col.headerClass ? col.headerClass : '']" @click="sortChange(col.field)">
-          <div class="form-check" v-if="col.selectable">
-            <input class="form-check-input" type="checkbox" :value="col" v-model="selectedColumns" @click.stop>
-            <label class="form-check-label">{{ col.title }}</label>
-            <sort-direction
-                :column="col"
-                :sortable="filter.useSorting"
-                :sort-column="filter.currentSortColumn"
-                :sort-direction="filter.currentSortDirection"
+        <!-- Заголовок з опцією вибору колонок -->
+        <div
+            :class="column.headerClass || ''"
+            @click="column.sort && filter.useSorting ? sortChange(column.field) : null"
+        >
+          <div v-if="column.selectable" class="form-check">
+          <input
+                class="form-check-input"
+                type="checkbox"
+                :value="column"
+                v-model="selectedColumns"
+                @click.stop
             />
+            <label class="form-check-label">{{ column.title }}</label>
           </div>
+
+          <!-- Заголовок для сортування -->
           <div v-else>
-            {{ col.title }}
-            <sort-direction
-                :column="col"
-                :sortable="filter.useSorting"
-                :sort-column="filter.currentSortColumn"
-                :sort-direction="filter.currentSortDirection"
-            />
+            {{ column.title }}
           </div>
+
+          <!-- Індикатор сортування -->
+          <sort-direction
+              :column="column"
+              :sortable="filter.useSorting"
+              :sort-column="filter.currentSortColumn"
+              :sort-direction="filter.currentSortDirection"
+          />
         </div>
       </th>
     </template>
@@ -49,11 +57,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from "vue"
 import useFilterStore from "@/stores/filter-store"
 import useDataTableStore from "@/stores/data-table-store"
 import useRepresentationStore from "@/stores/representation-store"
 import SortDirection from "@/components/header/columns/sort-direction.vue"
-import {ref, watch} from "vue"
+import {Column} from "@/types/column"
 
 const dataTable = useDataTableStore()
 const filter = useFilterStore()
@@ -63,7 +72,7 @@ const checkAll = ref(false)
 const selectedColumns = ref([])
 
 watch(checkAll, (value) => {
-  console.log(value)
+  console.log("Всі обрані:", value)
 })
 
 const sortChange = function (field: string) {
@@ -76,16 +85,21 @@ const sortChange = function (field: string) {
   filter.currentSortDirection = direction
   /*let offset = (this.currentPage - 1) * this.currentPageSize
   let limit = this.currentPageSize*/
-
-
- /* if (!this.persistSelection) {
-    this.selectAll(false)
-  }*/
-
-  /*if (this.isServerMode) {
-    this.changeForServer('sort')
-  } else {
-    this.$emit('sortChange', {offset, limit, field, direction})
-  }*/
 }
+
+
+// Отримання класів для колонки
+const getColumnClasses = (column: Column) => [
+  filter.useSorting && column.sort ? 'bh-cursor-pointer' : '',
+  column.position || '',
+  column.exportable ? 'exportable' : '',
+  column.className || ''
+]
+
+// Отримання стилів для колонки
+const getColumnStyles = (column: Column) => ({
+  width: column.width,
+  'min-width': column.minWidth,
+  'max-width': column.maxWidth
+})
 </script>

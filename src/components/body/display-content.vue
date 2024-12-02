@@ -1,7 +1,7 @@
 <template>
   <template v-if="dataTable.filterRowCount">
     <tr
-        v-for="(item, i) in dataTable.filterItems"
+        v-for="(item, i) in dataTable.paginatedItems"
         :key="item[uniqueKey] ? item[uniqueKey] : i"
         :class="[rowClass && typeof rowClass === 'function' ? rowClass(item) : rowClass, useSelectRowOnClick ? 'bh-cursor-pointer' : '', 'exportable']"
         @click="rowClick(item, i)"

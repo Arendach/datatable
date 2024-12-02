@@ -24,9 +24,7 @@ export interface DataTableProps {
   usePageSize?: boolean
   usePagination?: boolean
   isShowNumbers?: boolean
-  isShowNumbersCount?: number
-  isShowFirstPage?: boolean
-  isShowLastPage?: boolean
+  showNumbersCount?: number
   firstArrow?: string
   lastArrow?: string
   nextArrow?: string

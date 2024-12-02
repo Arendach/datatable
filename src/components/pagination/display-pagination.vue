@@ -1,70 +1,46 @@
 <template>
-  <div v-if="pagination && filterRowCount" class="bh-pagination bh-py-5" :class="{ 'pe-none': currentLoader }">
-    <div class="bh-flex bh-items-center bh-flex-wrap bh-flex-col sm:bh-flex-row bh-gap-4">
-      <div class="bh-pagination-info bh-flex bh-items-center">
-        <span class="bh-mr-2">
-          {{ stringFormat(paginationInfo, filterRowCount ? offset : 0, limit, filterRowCount) }}
-        </span>
-        <select v-if="showPageSize" v-model="currentPageSize" class="bh-pagesize">
-          <option v-for="option in pageSizeOptions" :value="option" :key="option">
-            {{ option }}
-          </option>
-        </select>
-      </div>
+  <div style="margin: 10px;">
+    <nav v-if="paginate.usePagination && paginate.paging.length > 1">
+      <ul class="pagination pagination-sm justify-content-center">
+        <li :class="['page-item', {disabled: paginate.page === 1}]">
+          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(paginate.page - 1)">«</a>
+        </li>
 
-      <div class="bh-pagination-number sm:bh-ml-auto bh-inline-flex bh-items-center bh-space-x-1">
-        <button v-if="showFirstPage" type="button" class="bh-page-item first-page" :class="{ disabled: currentPage <= 1 }" @click="currentPage = 1">
-          <span v-if="firstArrow" v-html="firstArrow"></span>
-          <img v-else :src="firstArrowSVG" alt="firstArrow">
-        </button>
+        <li v-if="paginate.isShowFirstPage" class="page-item">
+          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(1)">1</a>
+        </li>
 
-        <button type="button" class="bh-page-item previous-page" :class="{ disabled: currentPage <= 1 }"
-                @click="previousPage">
-          <span v-if="previousArrow" v-html="previousArrow"> </span>
-          <svg v-else aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
-            <path
-                fill="currentColor"
-                fill-rule="evenodd"
-                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
-            />
-          </svg>
-        </button>
+        <li v-if="paginate.isShowFirstDelimiter" class="page-item disabled">
+          <a class="page-link" href="javascript:void(0)">...</a>
+        </li>
 
-        <template v-if="showNumbers">
-          <button
-              v-for="page in paging"
-              :key="page"
-              type="button"
-              class="bh-page-item"
-              :class="{disabled: currentPage === page, 'bh-active': page === currentPage,}"
-              @click="movePage(page)"
-          >
-            {{ page }}
-          </button>
-        </template>
+        <li
+          v-for="page in paginate.paging"
+          :key="page"
+          :class="['page-item', { active: page === paginate.page }]"
+        >
+          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(page)" v-text="page"></a>
+        </li>
 
-        <button type="button" class="bh-page-item next-page" :class="{ disabled: currentPage >= maxPage }"
-                @click="nextPage">
-          <span v-if="nextArrow" v-html="nextArrow"> </span>
-          <svg v-else aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
-            <path
-                fill="currentColor"
-                fill-rule="evenodd"
-                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8L4.646 2.354a.5.5 0 0 1 0-.708z"
-            />
-          </svg>
-        </button>
+        <li v-if="paginate.isShowLastDelimiter" class="page-item disabled">
+          <a class="page-link" href="javascript:void(0)">...</a>
+        </li>
 
-        <button v-if="showLastPage" type="button" class="bh-page-item last-page" :class="{ disabled: currentPage >= maxPage }" @click="currentPage = maxPage">
-          <span v-if="lastArrow" v-html="lastArrow"> </span>
-          <img :src="lastArrowSVG" alt="lastArrow">
-        </button>
-      </div>
-    </div>
+        <li v-if="paginate.isShowLastPage" class="page-item">
+          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(paginate.maxPage)">
+            {{ paginate.maxPage }}
+          </a>
+        </li>
+        <li :class="['page-item', {disabled: paginate.page === paginate.maxPage}]">
+          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(paginate.page + 1)">»</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
 <script setup>
-import firstArrowSVG from '@/assets/images/first-arrow.svg'
-import lastArrowSVG from '@/assets/images/last-arrow.svg'
+import usePaginateStore from "@/stores/paginate-store"
+
+const paginate = usePaginateStore()
 </script>
