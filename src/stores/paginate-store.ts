@@ -23,7 +23,7 @@ const usePaginateStore = defineStore('paginate', {
   state: (): PaginationState => ({
     totalRows: 0,
     page: 1,
-    pageSize: 3,
+    pageSize: 5,
     pageSizeOptions: [10, 20, 50, 100, 200, 500, 10000],
     usePageSize: false,
     usePagination: false,

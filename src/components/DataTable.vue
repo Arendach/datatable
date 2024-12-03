@@ -1,8 +1,6 @@
 <template>
-  <div class="table-responsive" :style="{ 'height': props.height }">
-    <table-header/>
-
-    <table class="table table-sm table-bordered" :class="[skin ? `table-${skin}` : '']" :id="uniqueId">
+  <div class="table-responsive">
+    <table class="table table-sm table-bordered" :class="[skin ? `table-${skin}` : '']" :id="props.uniqueId ?? 'datatable'">
 
       <display-thead/>
 
@@ -19,7 +17,6 @@
 <script setup lang="ts">
 import useDataTableStore from "@/stores/data-table-store"
 import useRepresentationStore from "@/stores/representation-store"
-import TableHeader from "@/components/table-header.vue"
 import {DataTableProps} from "@/types/datatable-props"
 import DisplayTbody from "@/components/body/display-tbody.vue"
 import DisplayThead from "@/components/header/display-thead.vue"
@@ -106,11 +103,11 @@ const slotsStore = useSlotsStore()
 slotsStore.setSlots(useSlots())
 </script>
 
-
+<style>
+@import "@/assets/app.css";
+</style>
 /*
 export default {
-    this.setDefaultColumns()
-    this.loadSelectedColumns()
   },
   mounted() {
     this.filterRows()
@@ -137,37 +134,6 @@ export default {
       delay: 220,
       persistedElements: [],
     }
-  },
-  computed: {
-
-    storage() {
-      return store2.local.namespace(this.uniqueId)
-    },
-  },
-  watch: {
-    rows(value) {
-      this.filterItems = value
-      this.currentPageSize = this.pagination ? this.pageSize : value.length
-      this.filterRowCount = value.length
-
-      this.changeRows()
-    },
-    currentPage() {
-      this.changePage()
-    },
-    loading(value) {
-      this.currentLoader = value
-    },
-    currentPageSize() {
-      this.changePageSize()
-    },
-    selected(value) {
-      this.checkboxChange(value)
-    },
-    search(value) {
-      this.currentSearch = value
-      this.changeSearch()
-    },
   },
   methods: {
     selectAll(checked) {

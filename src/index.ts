@@ -1,5 +1,3 @@
-import DataTable from "./components/DataTable.vue";
-
-import './assets/app.scss'
+import DataTable from "./components/DataTable.vue"
 
 export default DataTable;
