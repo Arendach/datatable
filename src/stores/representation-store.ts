@@ -1,45 +1,34 @@
 import {defineStore} from 'pinia'
 
-type UiClass = Array<string> | null | Function | String
+type UiClass = Array<string> | null | Function | string
+
+interface RepresentationState {
+  skin: string | null
+  rowClass: UiClass
+  cellClass: UiClass
+  height: number | string | null
+  loading: boolean
+  hasAutoListing: boolean
+  hasCheckbox: boolean
+  cloneHeaderInFooter: boolean
+}
 
 const useRepresentationStore = defineStore('representation', {
-    state: () => ({
-        skin: null as String | null,
-        rowClass: null as UiClass,
-        cellClass: null as UiClass,
-        height: null as Number | String | null,
-        loading: true as Boolean,
-        hasAutoListing: false as Boolean,
-        hasCheckbox: false as Boolean,
-        cloneHeaderInFooter: false as Boolean,
-    }),
-    actions: {
-        setSkin(skin: String | null): void {
-            this.$state.skin = skin
-        },
-        setRowClass(rowClass: UiClass): void {
-            this.$state.rowClass = rowClass
-        },
-        setCellClass(cellClass: Array<string> | Function | null): void {
-            this.$state.cellClass = cellClass
-        },
-        setHeight(height: Number | String | null): void {
-            this.$state.height = height
-        },
-        setLoading(loading: Boolean): void {
-            this.$state.loading = loading
-        },
-        setHasAutoListing(hasAutoListing: Boolean): void {
-            this.$state.hasAutoListing = hasAutoListing
-        },
-        setHasCheckbox(hasCheckbox: Boolean): void {
-            this.$state.hasCheckbox = hasCheckbox
-        },
-        setCloneHeaderInFooter(cloneHeaderInFooter: Boolean): void {
-            this.$state.cloneHeaderInFooter = cloneHeaderInFooter
-        }
-    }
+  state: (): RepresentationState => ({
+    skin: null,
+    rowClass: null,
+    cellClass: null,
+    height: null,
+    loading: true,
+    hasAutoListing: false,
+    hasCheckbox: false,
+    cloneHeaderInFooter: false,
+  }),
+  actions: {
+    setProps(props: Partial<RepresentationState>): void {
+      Object.assign(this, props)
+    },
+  },
 })
-
 
 export default useRepresentationStore

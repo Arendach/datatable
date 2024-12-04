@@ -15,9 +15,10 @@
           @click="column.sort && filter.useSorting ? sortChange(column.field) : null"
         >
           <div v-if="column.selectable" class="form-check">
-            <input class="form-check-input" type="checkbox" :value="column.field" v-model="selectedColumns" @click.stop/>
+            <input class="form-check-input" type="checkbox" :value="column.field" v-model="selectedColumns"
+                   @click.stop/>
             <label class="form-check-label">{{ column.title }}</label>
-            <sort-direction
+            <display-sort-direction
               :column="column"
               :sortable="filter.useSorting"
               :sort-column="filter.currentSortColumn"
@@ -26,7 +27,7 @@
 
           <div v-else>
             {{ column.title }}
-            <sort-direction
+            <display-sort-direction
               :column="column"
               :sortable="filter.useSorting"
               :sort-column="filter.currentSortColumn"
@@ -43,7 +44,8 @@ import {ref} from "vue"
 import useFilterStore from "@/stores/filter-store"
 import useDataTableStore from "@/stores/data-table-store"
 import useRepresentationStore from "@/stores/representation-store"
-import SortDirection from "@/components/header/columns/sort-direction.vue"
+import SortDirection from "@/types/sort-direction"
+import DisplaySortDirection from "@/components/header/columns/display-sort-direction.vue"
 import {Column} from "@/types/column"
 
 const dataTable = useDataTableStore()
@@ -60,20 +62,19 @@ const toggleSelectAll = () => {
 const sortChange = function (field: string) {
   if (field !== filter.currentSortColumn) {
     filter.currentSortColumn = field
-    filter.currentSortDirection = 'asc'
+    filter.currentSortDirection = SortDirection.ASC
     return
   }
 
-  if (filter.currentSortDirection === 'asc') {
-    filter.currentSortDirection = 'desc'
-  } else if (filter.currentSortDirection === 'desc') {
-    filter.currentSortDirection = null
+  if (filter.currentSortDirection === SortDirection.ASC) {
+    filter.currentSortDirection = SortDirection.DESC
+  } else if (filter.currentSortDirection === SortDirection.DESC) {
+    filter.currentSortDirection = SortDirection.DEFAULT
     filter.currentSortColumn = null
   } else {
-    filter.currentSortDirection = 'asc'
+    filter.currentSortDirection = SortDirection.ASC
   }
 }
-
 
 const getColumnClasses = (column: Column) => [
   filter.useSorting && column.sort ? 'bh-cursor-pointer' : '',

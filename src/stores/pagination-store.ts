@@ -1,7 +1,6 @@
 import {defineStore} from 'pinia'
 import {useFilterRowCount} from "@/composables/use-filter-row-count"
 
-// Типізація стану
 interface PaginationState {
   totalRows: number
   page: number
@@ -19,7 +18,7 @@ interface PaginationState {
   noDataContent: string
 }
 
-const usePaginateStore = defineStore('paginate', {
+const usePaginationStore = defineStore('pagination', {
   state: (): PaginationState => ({
     totalRows: 0,
     page: 1,
@@ -83,49 +82,10 @@ const usePaginateStore = defineStore('paginate', {
     },
   },
   actions: {
-    setTotalRows(totalRows: number): void {
-      this.totalRows = totalRows
-    },
-    setPage(page: number): void {
-      this.page = page
-    },
-    setPageSize(pageSize: number): void {
-      this.pageSize = pageSize
-    },
-    setPageSizeOptions(pageSizeOptions: number[]): void {
-      this.pageSizeOptions = pageSizeOptions
-    },
-    setUsePageSize(usePageSize: boolean): void {
-      this.usePageSize = usePageSize
-    },
-    setUsePagination(usePagination: boolean): void {
-      this.usePagination = usePagination
-    },
-    setIsShowNumbers(isShowNumbers: boolean): void {
-      this.isShowNumbers = isShowNumbers
-    },
-    setShowNumbersCount(showNumbersCount: number): void {
-      this.showNumbersCount = showNumbersCount
-    },
-    setFirstArrow(firstArrow: string): void {
-      this.firstArrow = firstArrow
-    },
-    setLastArrow(lastArrow: string): void {
-      this.lastArrow = lastArrow
-    },
-    setNextArrow(nextArrow: string): void {
-      this.nextArrow = nextArrow
-    },
-    setPreviousArrow(previousArrow: string): void {
-      this.previousArrow = previousArrow
-    },
-    setPaginationInfo(paginationInfo: string): void {
-      this.paginationInfo = paginationInfo
-    },
-    setNoDataContent(noDataContent: string): void {
-      this.noDataContent = noDataContent
+    setProps(props: Partial<PaginationState>): void {
+      Object.assign(this, props)
     },
   },
 })
 
-export default usePaginateStore
+export default usePaginationStore

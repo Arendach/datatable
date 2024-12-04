@@ -3,7 +3,7 @@ import searching from "@/filter/native/searching"
 import sorting from "@/filter/native/sorting"
 import filtering from "@/filter/native/filter"
 
-function getFilteredRows() {
+function applyFilter() {
   const dataTable = useDataTableStore()
   let rows = dataTable.rows
 
@@ -14,4 +14,4 @@ function getFilteredRows() {
   return rows
 }
 
-export default getFilteredRows
+export default applyFilter

@@ -7,12 +7,12 @@
 <script setup lang="ts">
 import useDataTableStore from "@/stores/data-table-store"
 import useRepresentationStore from "@/stores/representation-store"
-import usePaginateStore from "@/stores/paginate-store"
+import usePaginationStore from "@/stores/pagination-store"
 import {useColumnCount} from "@/composables/use-column-count"
 
 const dataTable = useDataTableStore()
 const representation = useRepresentationStore()
-const paginate = usePaginateStore()
+const paginate = usePaginationStore()
 const countColumns = useColumnCount()
 
 </script>

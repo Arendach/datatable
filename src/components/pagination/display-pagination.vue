@@ -3,11 +3,11 @@
     <nav v-if="paginate.usePagination && paginate.paging.length > 1">
       <ul class="pagination pagination-sm justify-content-center">
         <li :class="['page-item', {disabled: paginate.page === 1}]">
-          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(paginate.page - 1)">«</a>
+          <a class="page-link" href="javascript:void(0)" @click="paginate.page--">«</a>
         </li>
 
         <li v-if="paginate.isShowFirstPage" class="page-item">
-          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(1)">1</a>
+          <a class="page-link" href="javascript:void(0)" @click="paginate.page = 1">1</a>
         </li>
 
         <li v-if="paginate.isShowFirstDelimiter" class="page-item disabled">
@@ -19,7 +19,7 @@
           :key="page"
           :class="['page-item', { active: page === paginate.page }]"
         >
-          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(page)" v-text="page"></a>
+          <a class="page-link" href="javascript:void(0)" @click="paginate.page = page" v-text="page"></a>
         </li>
 
         <li v-if="paginate.isShowLastDelimiter" class="page-item disabled">
@@ -27,12 +27,12 @@
         </li>
 
         <li v-if="paginate.isShowLastPage" class="page-item">
-          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(paginate.maxPage)">
+          <a class="page-link" href="javascript:void(0)" @click="paginate.page = paginate.maxPage">
             {{ paginate.maxPage }}
           </a>
         </li>
         <li :class="['page-item', {disabled: paginate.page === paginate.maxPage}]">
-          <a class="page-link" href="javascript:void(0)" @click="paginate.setPage(paginate.page + 1)">»</a>
+          <a class="page-link" href="javascript:void(0)" @click="paginate.page++">»</a>
         </li>
       </ul>
     </nav>
@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import usePaginateStore from "@/stores/paginate-store"
+import usePaginationStore from "@/stores/pagination-store"
 
-const paginate = usePaginateStore()
+const paginate = usePaginationStore()
 </script>

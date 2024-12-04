@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {Column} from "@/types/column"
-import getFilteredRows from "@/filter/native"
+import applyFilter from "@/filter/native"
 import usePaginatedRows from "@/composables/use-paginated-rows"
 import areArraysIdentical from "@/utility/are-arrays-identical"
 
@@ -12,8 +12,8 @@ const useDataTableStore = defineStore('dataTable', {
     selected: [] as Object[],
   }),
   getters: {
-    filterRowCount: () => getFilteredRows().length,
-    filterItems: () => getFilteredRows(),
+    filterRowCount: () => applyFilter().length,
+    filterItems: () => applyFilter(),
     paginatedItems: () => usePaginatedRows(),
     isAllSelected(state): boolean {
       return areArraysIdentical(this.paginatedItems, state.selected)

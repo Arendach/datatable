@@ -1,8 +1,8 @@
-import usePaginateStore from "@/stores/paginate-store"
+import usePaginationStore from "@/stores/pagination-store"
 import useDataTableStore from "@/stores/data-table-store"
 
 function usePaginationRows(): Array<Object> {
-  const paginate = usePaginateStore()
+  const paginate = usePaginationStore()
   const dataTable = useDataTableStore()
 
   return dataTable.filterItems.slice(paginate.offset - 1, <number>paginate.limit)

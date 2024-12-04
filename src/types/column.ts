@@ -45,10 +45,10 @@ export interface Column {
     className?: string
 
     // column width
-    width?: string,
+    width?: string
 
     // column max width
-    maxWidth?: string,
+    maxWidth?: string
 
     // filter column
     filterValue?: any

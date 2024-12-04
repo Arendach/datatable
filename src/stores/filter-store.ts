@@ -1,51 +1,35 @@
 import {defineStore} from 'pinia'
+import SortDirection from "@/types/sort-direction"
 
-enum SortDirection {
-    ASC = 'asc',
-    DESC = 'desc'
+interface FilterStore {
+  search: string | null
+  useSorting: boolean
+  sortColumn: string | null
+  sortDirection: SortDirection
+  useFiltering: boolean
+  useSelectRowOnClick: boolean
+  usePersistSelection: boolean
+  currentSortColumn: string | null
+  currentSortDirection: SortDirection
 }
 
 const useFilterStore = defineStore('filter', {
-    state: () => ({
-        search: '' as String,
-        useSorting: false as Boolean,
-        sortColumn: null as String | null,
-        sortDirection: SortDirection.ASC as SortDirection,
-        useFiltering: false as Boolean,
-        useSelectRowOnClick: false as Boolean,
-        usePersistSelection: false as Boolean,
-        currentSortColumn: '' as String,
-        currentSortDirection: '' as String,
-    }),
-    actions: {
-        setSearch(search: String): void {
-            this.$state.search = search
-        },
-        setUseSorting(useSorting: Boolean): void {
-            this.$state.useSorting = useSorting
-        },
-        setSortColumn(sortColumn: String): void {
-            this.$state.sortColumn = sortColumn
-        },
-        setSortDirection(sortDirection: SortDirection): void {
-            this.$state.sortDirection = sortDirection
-        },
-        setUseFiltering(useFiltering: Boolean): void {
-            this.$state.useFiltering = useFiltering
-        },
-        setUseSelectRowOnClick(useSelectRowOnClick: Boolean): void {
-            this.$state.useSelectRowOnClick = useSelectRowOnClick
-        },
-        setUsePersistSelection(usePersistSelection: Boolean): void {
-            this.$state.usePersistSelection = usePersistSelection
-        },
-        setCurrentSortColumn(sortColumn: string): void {
-            this.currentSortColumn = sortColumn
-        },
-        setCurrentSortDirection(sortDirection: string): void {
-            this.currentSortDirection = sortDirection
-        },
-    }
+  state: (): FilterStore => ({
+    search: null,
+    useSorting: false,
+    sortColumn: null,
+    sortDirection: SortDirection.DEFAULT,
+    useFiltering: false,
+    useSelectRowOnClick: false,
+    usePersistSelection: false,
+    currentSortColumn: null,
+    currentSortDirection: SortDirection.DEFAULT,
+  }),
+  actions: {
+    setProps(props: Partial<FilterStore>): void {
+      Object.assign(this, props)
+    },
+  },
 })
 
 export default useFilterStore

@@ -1,46 +1,30 @@
-import {Column} from "@/types/column"
+import type {Column} from "@/types/column"
+import type {PaginationProps} from "@/types/pagination-props"
+import type {FilterProps} from "@/types/filter-props"
+import type {RepresentationProps} from "@/types/representation-props"
 
 export interface DataTableProps {
-  // Representation
-  skin?: string
-  rowClass?: string | ((row: Record<string, any>, rowIndex: number) => string)
-  cellClass?: string | ((row: Record<string, any>, column: Column, rowIndex: number, columnIndex: number) => string)
-  height?: string
-  loading?: boolean
-  hasAutoListing?: boolean
-  hasCheckbox?: boolean
-  cloneHeaderInFooter?: boolean
+  // uniqueId is a required parameter so that there are no conflicts with other tables
+  uniqueId: string
 
-  // Data
+  // columns is a required parameter as it describes the representation of the table
   columns: Column[]
-  rows: Record<string, any>[]
-  isServerMode?: boolean
 
-  // Pagination
-  totalRows?: number
-  page?: number
-  pageSize?: number
-  pageSizeOptions?: number[]
-  usePageSize?: boolean
-  usePagination?: boolean
-  isShowNumbers?: boolean
-  showNumbersCount?: number
-  firstArrow?: string
-  lastArrow?: string
-  nextArrow?: string
-  previousArrow?: string
-  paginationInfo?: string
-  noDataContent?: string
+  // The isServerMode parameter is necessary for the component to understand where to get data from
+  isServerMode: boolean
 
-  // Filtering and sorting
-  search?: string
-  useSorting?: boolean
-  sortColumn?: string
-  sortDirection?: 'asc' | 'desc' | '' // Можливі значення
-  useFiltering?: boolean
-  useSelectRowOnClick?: boolean
-  usePersistSelection?: boolean
+  // rows parameter is passed if isServerMode = false
+  rows?: Object[]
 
-  // Other
-  uniqueId?: string
+  // rows parameter is passed if isServerMode = true
+  endpoint?: string
+
+  // Representation
+  representation?: RepresentationProps
+
+  // Pagination settings
+  pagination?: PaginationProps
+
+  // Filtering and sorting settings
+  filter?: FilterProps
 }
