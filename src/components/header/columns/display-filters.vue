@@ -15,7 +15,7 @@
               v-model.trim="column.filterValue"
               type="text"
               class="form-control form-control-sm"
-              @input="$emit('filterChange')"
+              @input="eventBus.emit(Events.FILTERS_UPDATED)"
           />
 
           <!-- Поле вводу для числових значень -->
@@ -24,7 +24,7 @@
               v-model.number.trim="column.filterValue"
               type="number"
               class="form-control form-control-sm"
-              @input="$emit('filterChange')"
+              @input="eventBus.emit(Events.FILTERS_UPDATED)"
           />
 
           <!-- Поле для дати -->
@@ -33,7 +33,7 @@
               v-model="column.filterValue"
               type="date"
               class="form-control form-control-sm"
-              @change="$emit('filterChange')"
+              @change="eventBus.emit(Events.FILTERS_UPDATED)"
           />
 
           <!-- Поле для булевих значень -->
@@ -41,7 +41,7 @@
               v-else-if="column.type === ColumnType.BOOLEAN"
               v-model="column.filterValue"
               class="form-control form-control-sm"
-              @change="$emit('filterChange')"
+              @change="eventBus.emit(Events.FILTERS_UPDATED)"
           >
             <option :value="undefined">Всі</option>
             <option :value="true">Так</option>
@@ -59,7 +59,7 @@
                   type="date"
                   v-model="column.startDate"
                   class="form-control form-control-sm date-range-input"
-                  @change="$emit('filterChange')"
+                  @change="eventBus.emit(Events.FILTERS_UPDATED)"
               />
             </div>
             <div class="date-range-field">
@@ -68,14 +68,14 @@
                   type="date"
                   v-model="column.endDate"
                   class="form-control form-control-sm date-range-input"
-                  @change="$emit('filterChange')"
+                  @change="eventBus.emit(Events.FILTERS_UPDATED)"
               />
             </div>
           </div>
 
           <!-- Кнопка для додаткових фільтрів -->
           <button
-              v-if="column.type !== 'BOOLEAN' && column.type !== 'date-range'"
+              v-if="column.type !== ColumnType.BOOLEAN && column.type !== ColumnType.DATE_RANGE"
               class="btn btn-sm btn-outline-secondary dropdown-toggle"
               type="button"
               data-bs-toggle="dropdown"
@@ -84,13 +84,7 @@
           ></button>
 
           <!-- Додаткові фільтри -->
-          <column-filter
-              v-if="column.type !== 'date-range'"
-              :column="column"
-              :type="column.type"
-              @close="$emit('toggleFilterMenu', null)"
-              @filterChange="$emit('filterChange')"
-          />
+          <column-filter v-if="column.type !== ColumnType.DATE_RANGE" :column="column"/>
         </div>
       </th>
     </template>
@@ -103,10 +97,12 @@ import useFilterStore from "@/stores/filter-store"
 import useDataTableStore from "@/stores/data-table-store"
 import ColumnFilter from "@/components/header/columns/column-filter.vue"
 import ColumnType from "@/types/column-type"
+import useEventBus from "@/composables/use-event-bus"
 
 const representation = useRepresentationStore()
 const filter = useFilterStore()
 const dataTable = useDataTableStore()
+const eventBus = useEventBus()
 </script>
 
 

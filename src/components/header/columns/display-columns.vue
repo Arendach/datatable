@@ -15,8 +15,7 @@
           @click="column.sort && filter.useSorting ? sortChange(column.field) : null"
         >
           <div v-if="column.selectable" class="form-check">
-            <input class="form-check-input" type="checkbox" :value="column.field" v-model="selectedColumns"
-                   @click.stop/>
+            <input class="form-check-input" type="checkbox" :value="column.field" v-model="selectedColumns" @click.stop/>
             <label class="form-check-label">{{ column.title }}</label>
             <display-sort-direction
               :column="column"
@@ -47,10 +46,12 @@ import useRepresentationStore from "@/stores/representation-store"
 import SortDirection from "@/types/sort-direction"
 import DisplaySortDirection from "@/components/header/columns/display-sort-direction.vue"
 import {Column} from "@/types/column"
+import useEventBus from "@/composables/use-event-bus"
 
 const dataTable = useDataTableStore()
 const filter = useFilterStore()
 const representation = useRepresentationStore()
+const eventBus = useEventBus()
 
 const selectedColumns = ref([])
 
@@ -60,6 +61,8 @@ const toggleSelectAll = () => {
 }
 
 const sortChange = function (field: string) {
+  eventBus.emit(Events.SORT_CHANGED)
+
   if (field !== filter.currentSortColumn) {
     filter.currentSortColumn = field
     filter.currentSortDirection = SortDirection.ASC

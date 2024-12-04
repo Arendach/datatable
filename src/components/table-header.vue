@@ -15,6 +15,7 @@
                 class="form-control form-control-sm"
                 placeholder="Please enter text to filter"
                 v-model="filter.search"
+                @input="eventBus.emit(Events.SEARCH_CHANGED)"
               >
               <button class="btn btn-outline-secondary" type="button">Search</button>
             </div>
@@ -70,15 +71,17 @@ import useFilterStore from "@/stores/filter-store"
 import {ref, watch} from "vue"
 import exportToEXCEL from "@/utility/export-to-excel"
 import {useColumnCount} from "@/composables/use-column-count"
+import useEventBus from "@/composables/use-event-bus"
 
 const dataTable = useDataTableStore()
 const representation = useRepresentationStore()
 const filter = useFilterStore()
+const eventBus = useEventBus()
 
 const hasCheckbox = ref(representation.hasCheckbox)
 const hasAutoListing = ref(representation.hasAutoListing)
 const columnCount = useColumnCount()
 
-watch(hasCheckbox, (value: boolean) => representation.setHasCheckbox(value))
-watch(hasAutoListing, (value: boolean) => representation.setHasAutoListing(value))
+watch(hasCheckbox, (value: boolean) => representation.hasCheckbox = value)
+watch(hasAutoListing, (value: boolean) => representation.hasAutoListing = value)
 </script>

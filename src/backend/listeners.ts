@@ -1,4 +1,1 @@
-import {useEventBus, on} from "@/composables/use-event-bus"
-
-
-on(Events.SORT_CHANGED, )
+import {useEventBus, on, emit} from "@/composables/use-event-bus"

@@ -15,6 +15,7 @@
 import {reactive} from 'vue'
 import Condition from "@/types/condition"
 import {Column} from "@/types/column"
+import useEventBus from "@/composables/use-event-bus"
 
 const conditions = reactive({
   default: {
@@ -53,5 +54,7 @@ const select = (condition: Condition) => {
   if (condition === Condition.WITHOUT) {
     props.column.filterValue = ''
   }
+
+  useEventBus().emit(Events.FILTERS_UPDATED)
 }
 </script>
