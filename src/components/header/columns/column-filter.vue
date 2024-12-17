@@ -16,6 +16,7 @@ import {reactive} from 'vue'
 import Condition from "@/types/condition"
 import {Column} from "@/types/column"
 import useEventBus from "@/composables/use-event-bus"
+import Events from "@/types/events"
 
 const conditions = reactive({
   default: {

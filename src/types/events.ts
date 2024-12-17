@@ -39,3 +39,5 @@ enum Events {
    */
   DATA_LOADED = 'data-loaded',
 }
+
+export default Events

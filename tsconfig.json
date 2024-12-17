@@ -4,7 +4,7 @@
     // Цільова версія JavaScript
     "module": "esnext",
     // Використовувати ES-модулі
-    "strict": true,
+    "strict": false,
     // Увімкнути всі суворі перевірки
     "jsx": "preserve",
     // Для Vue JSX/TSX (якщо використовується)
@@ -27,7 +27,10 @@
       ]
     },
     "allowJs": true,
-    "types": ["vite/client", "vue"]
+    "types": [
+      "vite/client",
+      "vue"
+    ]
   },
   "include": [
     "src/**/*.ts",

@@ -2,8 +2,9 @@ import useDataTableStore from "@/stores/data-table-store"
 import searching from "@/filter/native/searching"
 import sorting from "@/filter/native/sorting"
 import filtering from "@/filter/native/filter"
+import paginate from "@/filter/native/paginate"
 
-function applyFilter() {
+function applyNativeFilter() {
   const dataTable = useDataTableStore()
   let rows = dataTable.rows
 
@@ -11,7 +12,11 @@ function applyFilter() {
   rows = searching(rows)
   rows = sorting(rows)
 
-  return rows
+  dataTable.filteredItems = rows
+
+  rows = paginate(rows)
+
+  dataTable.paginatedItems = rows
 }
 
-export default applyFilter
+export default applyNativeFilter

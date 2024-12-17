@@ -1,6 +1,6 @@
 import ColumnType from "@/types/column-type"
 import Condition from "@/types/condition"
-import type Column from "@/types/column"
+import {Column} from "@/types/column"
 
 const defaultColumnValues: Omit<Column, 'field' | 'title'> = {
   type: ColumnType.STRING,

@@ -1,41 +1,28 @@
-import axios from "axios"
-import {ref} from "vue"
-import useQueryBuilder from "./useQueryBuilder"
-import useEventBus from "./useEventBus"
+import useDataTableStore from "@/stores/data-table-store"
+import useApi from "@/utility/use-api"
 
-function applyFilter(endpoint: string) {
-  const {emit, on} = useEventBus()
-  const rows = ref([])
-  const loading = ref(false)
-  const total = ref(0)
-  const queryParams = ref({})
+export default function applyBackendFilter() {
+  const datatable = useDataTableStore()
+  const api = useApi()
 
-  const fetchData = async () => {
-    loading.value = true
-    const queryString = useQueryBuilder(queryParams.value)
-    try {
-      const response = await axios.get(`${endpoint}?${queryString}`)
-      rows.value = response.data.data // Адаптуйте під вашу структуру
-      total.value = response.data.total // Загальна кількість записів
-    } catch (err) {
-      console.error("Error fetching data:", err)
-    } finally {
-      loading.value = false
-    }
-  }
-
-  // Слухаємо події
-  on("filters-updated", (filters) => {
-    queryParams.value = {...queryParams.value, ...filters}
-    fetchData()
+  fetch('http://simplify.local/api/companies', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    mode: 'cors',
   })
-
-  return {
-    rows,
-    loading,
-    total,
-    fetchData,
-  }
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
-
-export default applyFilter

@@ -98,6 +98,7 @@ import useDataTableStore from "@/stores/data-table-store"
 import ColumnFilter from "@/components/header/columns/column-filter.vue"
 import ColumnType from "@/types/column-type"
 import useEventBus from "@/composables/use-event-bus"
+import Events from "@/types/events"
 
 const representation = useRepresentationStore()
 const filter = useFilterStore()

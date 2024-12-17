@@ -1,5 +1,5 @@
 <template>
-  <template v-if="!dataTable.filterRowCount && representation.loading">
+  <template v-if="!dataTable.filteredItems.length && dataTable.isLoading">
     <tr>
       <td :colspan="countColumns">
         <div class="d-flex justify-content-center">
@@ -14,11 +14,9 @@
 
 <script setup lang="ts">
 import useDataTableStore from "@/stores/data-table-store"
-import useRepresentationStore from "@/stores/representation-store"
 import {useColumnCount} from "@/composables/use-column-count"
 
 const dataTable = useDataTableStore()
-const representation = useRepresentationStore()
 const countColumns = useColumnCount()
 
 </script>

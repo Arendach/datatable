@@ -1,5 +1,5 @@
 <template>
-  <template v-if="dataTable.filterRowCount">
+  <template v-if="dataTable.filteredItems.length > 0">
     <tr
       v-for="(item, i) in dataTable.paginatedItems"
       :key="item[uniqueKey] ? item[uniqueKey] : i"

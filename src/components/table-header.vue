@@ -72,6 +72,7 @@ import {ref, watch} from "vue"
 import exportToEXCEL from "@/utility/export-to-excel"
 import {useColumnCount} from "@/composables/use-column-count"
 import useEventBus from "@/composables/use-event-bus"
+import Events from "@/types/events"
 
 const dataTable = useDataTableStore()
 const representation = useRepresentationStore()

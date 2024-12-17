@@ -47,6 +47,7 @@ import SortDirection from "@/types/sort-direction"
 import DisplaySortDirection from "@/components/header/columns/display-sort-direction.vue"
 import {Column} from "@/types/column"
 import useEventBus from "@/composables/use-event-bus"
+import Events from "@/types/events"
 
 const dataTable = useDataTableStore()
 const filter = useFilterStore()

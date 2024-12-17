@@ -1,7 +1,5 @@
 import {defineStore} from 'pinia'
 import {Column} from "@/types/column"
-import applyFilter from "@/filter/native"
-import usePaginatedRows from "@/composables/use-paginated-rows"
 import areArraysIdentical from "@/utility/are-arrays-identical"
 
 const useDataTableStore = defineStore('dataTable', {
@@ -9,22 +7,30 @@ const useDataTableStore = defineStore('dataTable', {
     columns: [] as Column[],
     rows: [] as Object[],
     isServerMode: false as Boolean,
-    selected: [] as Object[],
+    selected: [] as Array<Object>,
+    filteredItems: [] as Array<Object>,
+    paginatedItems: [] as Array<Object>,
+    isLoading: true,
+    endpoint: '' as string,
   }),
   getters: {
-    filterRowCount: () => applyFilter().length,
-    filterItems: () => applyFilter(),
-    paginatedItems: () => usePaginatedRows(),
     isAllSelected(state): boolean {
-      return areArraysIdentical(this.paginatedItems, state.selected)
+      return areArraysIdentical(state.filteredItems, state.selected)
     },
   },
   actions: {
     setColumns(columns: Column[]): void {
       this.columns = columns
     },
-    setRows(rows: Object[]): void {
+    setRows(rows: Array<Object>): void {
       this.rows = rows
+    },
+    setEndpoint(endpoint: string): void {
+      this.endpoint = endpoint
+    },
+    init() {
+      this.filteredItems = this.rows
+      this.isLoading = false
     },
     setIsServerMode(isSeverMode: Boolean): void {
       this.isServerMode = isSeverMode
@@ -38,7 +44,7 @@ const useDataTableStore = defineStore('dataTable', {
       else this.selected.push(item)
     },
     selectAll(): void {
-      this.selected = this.paginatedItems
+      this.selected = this.filteredItems
     },
     clearSelected(): void {
       this.selected = []

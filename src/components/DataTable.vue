@@ -22,6 +22,10 @@ import usePaginationStore from "@/stores/pagination-store"
 import {useSlots} from "vue"
 import normalizeColumn from "@/utility/normalize-column"
 import {DataTableProps} from "@/types/datatable-props"
+import applyNativeListeners from "@/filter/native/listeners"
+import applyNativeFilter from "@/filter/native"
+import applyBackendListeners from "@/filter/backend/listeners"
+import applyBackendFilter from "@/filter/backend"
 
 const props = defineProps<DataTableProps>()
 
@@ -31,8 +35,10 @@ props.columns.map(normalizeColumn)
 // dataTableStore
 const dataTableStore = useDataTableStore()
 dataTableStore.setColumns(props.columns)
-dataTableStore.setRows(props.rows)
+dataTableStore.setRows(props.rows ?? [])
 dataTableStore.setIsServerMode(props.isServerMode)
+dataTableStore.setEndpoint(props.endpoint ?? '')
+dataTableStore.init()
 
 // representationStore
 const representationStore = useRepresentationStore()
@@ -49,6 +55,14 @@ paginationStore.setProps(props.pagination)
 // set slots to global store
 const slotsStore = useSlotsStore()
 slotsStore.setSlots(useSlots())
+
+if (props.isServerMode) {
+  applyBackendListeners()
+  applyBackendFilter()
+} else {
+  applyNativeListeners()
+  applyNativeFilter()
+}
 
 </script>
 

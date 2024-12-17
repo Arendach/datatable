@@ -5,7 +5,7 @@ function usePaginationRows(): Array<Object> {
   const paginate = usePaginationStore()
   const dataTable = useDataTableStore()
 
-  return dataTable.filterItems.slice(paginate.offset - 1, <number>paginate.limit)
+  return dataTable.filteredItems.slice(paginate.offset - 1, <number>paginate.limit)
 }
 
 export default usePaginationRows

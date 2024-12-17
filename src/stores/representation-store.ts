@@ -7,7 +7,6 @@ interface RepresentationState {
   rowClass: UiClass
   cellClass: UiClass
   height: number | string | null
-  loading: boolean
   hasAutoListing: boolean
   hasCheckbox: boolean
   cloneHeaderInFooter: boolean
@@ -19,7 +18,6 @@ const useRepresentationStore = defineStore('representation', {
     rowClass: null,
     cellClass: null,
     height: null,
-    loading: true,
     hasAutoListing: false,
     hasCheckbox: false,
     cloneHeaderInFooter: false,
