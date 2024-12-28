@@ -45,7 +45,7 @@ const usePaginationStore = defineStore('pagination', {
       return useFilterRowCount() >= limit ? limit : useFilterRowCount()
     },
     maxPage(state): number {
-      const totalPages = state.pageSize < 1 ? 1 : Math.ceil(useFilterRowCount() / state.pageSize)
+      const totalPages = state.pageSize < 1 ? 1 : Math.ceil(this.totalRows / state.pageSize)
 
       return Math.max(totalPages || 0, 1)
     },

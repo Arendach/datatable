@@ -62,11 +62,12 @@ const toggleSelectAll = () => {
 }
 
 const sortChange = function (field: string) {
-  eventBus.emit(Events.SORT_CHANGED)
-
   if (field !== filter.currentSortColumn) {
     filter.currentSortColumn = field
     filter.currentSortDirection = SortDirection.ASC
+
+    eventBus.emit(Events.SORT_CHANGED)
+
     return
   }
 
@@ -78,6 +79,8 @@ const sortChange = function (field: string) {
   } else {
     filter.currentSortDirection = SortDirection.ASC
   }
+
+  eventBus.emit(Events.SORT_CHANGED)
 }
 
 const getColumnClasses = (column: Column) => [

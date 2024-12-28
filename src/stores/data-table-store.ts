@@ -30,7 +30,10 @@ const useDataTableStore = defineStore('dataTable', {
     },
     init() {
       this.filteredItems = this.rows
-      this.isLoading = false
+
+      if (!this.isServerMode) {
+        this.isLoading = false
+      }
     },
     setIsServerMode(isSeverMode: Boolean): void {
       this.isServerMode = isSeverMode
