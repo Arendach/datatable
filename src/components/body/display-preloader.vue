@@ -1,15 +1,13 @@
 <template>
-  <template v-if="!dataTable.filteredItems.length && dataTable.isLoading">
-    <tr>
-      <td :colspan="countColumns">
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
+  <tr>
+    <td :colspan="countColumns">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
-      </td>
-    </tr>
-  </template>
+      </div>
+    </td>
+  </tr>
 </template>
 
 <script setup lang="ts">

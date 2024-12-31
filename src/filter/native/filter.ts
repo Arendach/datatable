@@ -9,21 +9,7 @@ import isEmptyFilter from "@/filter/native/filters/is-empty"
 import isNotEmptyFilter from "@/filter/native/filters/is-not-empty"
 import Condition from "@/types/condition"
 import ColumnType from "@/types/column-type"
-
-// Перевірка, чи потрібно застосовувати фільтр
-function shouldApplyFilter(column: Column): boolean {
-    return (
-        column.filter &&
-        (
-            column.filterValue !== undefined &&
-            column.filterValue !== null &&
-            column.filterValue !== ''
-        ) ||
-        column.condition === Condition.IS_EMPTY ||
-        column.condition === Condition.IS_NOT_EMPTY ||
-        column.type === ColumnType.DATE_RANGE
-    )
-}
+import shouldApplyFilter from "@/utility/should-apply-filter"
 
 // Основна логіка фільтрації
 function filtering(rows: Array<object>): Array<object> {

@@ -10,6 +10,7 @@ interface RepresentationState {
   hasAutoListing: boolean
   hasCheckbox: boolean
   cloneHeaderInFooter: boolean
+  dateFormat: string
 }
 
 const useRepresentationStore = defineStore('representation', {
@@ -21,6 +22,7 @@ const useRepresentationStore = defineStore('representation', {
     hasAutoListing: false,
     hasCheckbox: false,
     cloneHeaderInFooter: false,
+    dateFormat: 'dd.mm.yyyy',
   }),
   actions: {
     setProps(props: Partial<RepresentationState>): void {

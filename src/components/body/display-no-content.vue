@@ -1,5 +1,5 @@
 <template>
-  <tr v-if="!dataTable.filteredItems.length && !dataTable.isLoading">
+  <tr>
     <td :colspan="countColumns" class="no-data" v-html="paginate.noDataContent"></td>
   </tr>
 </template>

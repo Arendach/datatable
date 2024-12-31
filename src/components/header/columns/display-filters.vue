@@ -28,13 +28,15 @@
           />
 
           <!-- Поле для дати -->
-          <input
-              v-else-if="column.type === ColumnType.DATE"
-              v-model="column.filterValue"
-              type="date"
-              class="form-control form-control-sm"
-              @change="eventBus.emit(Events.FILTERS_UPDATED)"
-          />
+          <vue-date-picker
+            v-else-if="column.type === ColumnType.DATE"
+            v-model="column.filterValue"
+            @change="eventBus.emit(Events.FILTERS_UPDATED)"
+            :preview-format="displayDate"
+            :format="displayDate"
+            :auto-apply="true"
+            :enable-time-picker="false"
+          ></vue-date-picker>
 
           <!-- Поле для булевих значень -->
           <select
@@ -49,29 +51,15 @@
           </select>
 
           <!-- Поле для діапазону дат -->
-          <div
-              v-else-if="column.type === 'date-range'"
-              class="input-group date-range-filter"
-          >
-            <div class="date-range-field">
-              <label>З:</label>
-              <input
-                  type="date"
-                  v-model="column.startDate"
-                  class="form-control form-control-sm date-range-input"
-                  @change="eventBus.emit(Events.FILTERS_UPDATED)"
-              />
-            </div>
-            <div class="date-range-field">
-              <label>По:</label>
-              <input
-                  type="date"
-                  v-model="column.endDate"
-                  class="form-control form-control-sm date-range-input"
-                  @change="eventBus.emit(Events.FILTERS_UPDATED)"
-              />
-            </div>
-          </div>
+          <vue-date-picker
+            v-else-if="column.type === ColumnType.DATE_RANGE"
+            v-model="column.filterValue"
+            @change="eventBus.emit(Events.FILTERS_UPDATED)"
+            :enable-time-picker="false"
+            :preview-format="displayDateRange"
+            :format="displayDateRange"
+            range
+          ></vue-date-picker>
 
           <!-- Кнопка для додаткових фільтрів -->
           <button
@@ -99,6 +87,10 @@ import ColumnFilter from "@/components/header/columns/column-filter.vue"
 import ColumnType from "@/types/column-type"
 import useEventBus from "@/composables/use-event-bus"
 import Events from "@/types/events"
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+import displayDate from "@/utility/display-date"
+import displayDateRange from "@/utility/display-date-range"
 
 const representation = useRepresentationStore()
 const filter = useFilterStore()

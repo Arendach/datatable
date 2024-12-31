@@ -19,7 +19,6 @@ function jsonToQuery(params: Record<string, any> = {}): string {
 const DefaultHeaders: Object = {
     'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
-    'Referer': 'https://simplify.local/'
 }
 
 const DefaultOptions = {
@@ -41,36 +40,11 @@ const ResponseHandler = (res) => {
 
 export default function useApi() {
     return {
-        async get(url: string, queryParams: Record<any, string>, options: Record<any, string> = {}) {
+        async get(url: string, queryParams: any, options: Record<any, string> = {}) {
             return fetch(this.apiUrl(url, queryParams), {
                 method: 'GET',
                 ...DefaultOptions,
                 ...options,
-            }).then(ResponseHandler)
-        },
-
-        async put(url: string, body: Record<any, string>, options: Record<any, string> = {}) {
-            return fetch(this.apiUrl(url), {
-                method: 'PUT',
-                body: JSON.stringify(body),
-                ...DefaultOptions,
-                ...options,
-            }).then(ResponseHandler)
-        },
-
-        async post(url: string, body: Record<any, string>, options: Record<any, string> = {}) {
-            return fetch(this.apiUrl(url), {
-                method: 'POST',
-                body: JSON.stringify(body),
-                ...DefaultOptions,
-                ...options,
-            }).then(ResponseHandler)
-        },
-
-        async delete(url: string) {
-            return fetch(this.apiUrl(url), {
-                method: 'DELETE',
-                ...DefaultOptions,
             }).then(ResponseHandler)
         },
 

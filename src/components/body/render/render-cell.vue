@@ -24,7 +24,7 @@
     </template>
 
     <!-- Date render -->
-    <template v-else-if="column.type === ColumnType.DATE">
+    <template v-else-if="column.type === ColumnType.DATE || column.type === ColumnType.DATE_RANGE">
       <render-date :name="column.field" :item="item"></render-date>
     </template>
 
