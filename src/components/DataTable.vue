@@ -58,7 +58,7 @@ slotsStore.setSlots(useSlots())
 
 if (props.isServerMode) {
   applyBackendListeners()
-  applyBackendFilter()
+  applyBackendFilter(false)
 } else {
   applyNativeListeners()
   applyNativeFilter()

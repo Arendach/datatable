@@ -1,57 +1,77 @@
-function jsonToQuery(params: Record<string, any> = {}): string {
-    const queryString = new URLSearchParams();
+export function jsonToQuery(params: Record<string, any>, prefix: string = ''): string {
+  const queryParts: string[] = []
 
-    // Перебираємо ключі і значення об'єкта params
-    for (const [key, value] of Object.entries(params)) {
-        // Якщо значення масив або об'єкт, перетворюємо в JSON строку
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const value = params[key]
+      const prefixedKey = prefix ? `${prefix}[${encodeURIComponent(key)}]` : encodeURIComponent(key)
+
+      if (value !== null && typeof value === 'object') {
         if (Array.isArray(value)) {
-            value.forEach((item) => queryString.append(key, item));
-        } else if (typeof value === 'object' && value !== null) {
-            queryString.append(key, JSON.stringify(value));
+          value.forEach((item, index) => {
+            if (typeof item === 'object' && item !== null) {
+              queryParts.push(jsonToQuery(item, `${prefixedKey}[${index}]`))
+            } else {
+              queryParts.push(`${prefixedKey}[${index}]=${encodeURIComponent(item)}`)
+            }
+          })
         } else {
-            queryString.append(key, value.toString());
+          queryParts.push(jsonToQuery(value, prefixedKey))
         }
+      } else {
+        queryParts.push(`${prefixedKey}=${encodeURIComponent(value)}`)
+      }
     }
+  }
 
-    return queryString.toString();
+  return queryParts.join('&')
 }
 
-const DefaultHeaders: Object = {
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
+const DefaultHeaders: HeadersInit = {
+  'Content-Type': 'application/json',
+  'X-Requested-With': 'XMLHttpRequest',
 }
 
-const DefaultOptions = {
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: DefaultHeaders,
+const DefaultOptions: RequestInit = {
+  mode: 'cors',
+  cache: 'no-cache',
+  credentials: 'same-origin',
+  headers: DefaultHeaders,
 }
 
-const ResponseHandler = (res) => {
-    if (res.status === 401 && window.location.pathname !== '/login') {
-        window.location.href = '/login'
-    }
+const ResponseHandler = (res: any) => {
+  if (res.status === 401 && window.location.pathname !== '/login') {
+    window.location.href = '/login'
+  }
 
-    if (!res.ok) throw res
+  if (!res.ok) throw res
 
-    return res.json()
+  return res.json()
 }
 
 export default function useApi() {
-    return {
-        async get(url: string, queryParams: any, options: Record<any, string> = {}) {
-            return fetch(this.apiUrl(url, queryParams), {
-                method: 'GET',
-                ...DefaultOptions,
-                ...options,
-            }).then(ResponseHandler)
-        },
+  return {
+    async get(url: string, queryParams: Record<string, string> = {}, options: RequestInit = {}) {
+      const urlObj = new URL(url, window.location.origin)
 
-        apiUrl(path: string, queryParams: Record<any, string> = {}): string {
-            let query = jsonToQuery(queryParams)
+      const originalParams = Object.fromEntries(urlObj.searchParams.entries())
+      const mergedParams = {...originalParams, ...queryParams}
 
-            return `${path}?${query}`
-        },
-    }
+      urlObj.search = ''
+
+      const finalUrl = this.apiUrl(urlObj.toString(), mergedParams)
+
+      return fetch(finalUrl, {
+        method: 'GET',
+        ...DefaultOptions,
+        ...options,
+      }).then(ResponseHandler)
+    },
+    apiUrl(path: string, queryParams: Record<any, string> = {}): string {
+      let query = jsonToQuery(queryParams)
+
+      return `${path}?${query}`
+    },
+  }
 }
+

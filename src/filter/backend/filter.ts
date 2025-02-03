@@ -30,7 +30,6 @@ function applyFilter(params: Partial<BackendParams>): Partial<BackendParams> {
           break
       }
 
-      // Обробка специфічних умов
       if (column.condition === Condition.IS_EMPTY) {
         filters.push(applyIsEmpty(column))
       } else if (column.condition === Condition.IS_NOT_EMPTY) {

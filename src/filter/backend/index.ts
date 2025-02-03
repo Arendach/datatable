@@ -8,7 +8,6 @@ import applySearch from "@/filter/backend/searching"
 import applyPaginate from "@/filter/backend/paginate"
 import {BackendParams} from "@/types/backend-params"
 
-
 const sendRequest = (params: Partial<BackendParams>): void => {
   const datatable = useDataTableStore()
   const pagination = usePaginationStore()
@@ -20,9 +19,10 @@ const sendRequest = (params: Partial<BackendParams>): void => {
     datatable.paginatedItems = response.data
     datatable.rows = response.data
     datatable.filteredItems = response.data
+
     datatable.isLoading = false
+
     pagination.totalRows = response.meta.total
-    datatable.isLoading = false
   })
 }
 
@@ -40,5 +40,4 @@ export default function applyBackendFilter(needDelay: boolean) {
 
   if (needDelay) sendRequestWithDelay(params)
   else sendRequest(params)
-
 }

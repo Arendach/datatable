@@ -1,8 +1,9 @@
 <template>
   <td
-      v-if="column.show"
-      :key="column.field"
-      :class="[
+    style="vertical-align: middle"
+    v-if="column.show"
+    :key="column.field"
+    :class="[
         typeof cellClass === 'function' ? cellClass(item) : '',
         column.exportable ? 'exportable' : '',
         column.className ? column.className : '',
@@ -28,6 +29,10 @@
       <render-date :name="column.field" :item="item"></render-date>
     </template>
 
+    <template v-else-if="column.type === ColumnType.PICTURE">
+      <render-picture :url="displayCellValue(item, column.field)"></render-picture>
+    </template>
+
     <!-- Native text render -->
     <template v-else>
       {{ displayCellValue(item, column.field) }}
@@ -39,6 +44,7 @@
 import displayCellValue from "@/utility/display-cell-value"
 import RenderBoolean from "@/components/body/render/boolean.vue"
 import RenderDate from "@/components/body/render/date.vue"
+import RenderPicture from "@/components/body/render/picture.vue"
 import {Column} from "@/types/column"
 import ColumnType from "@/types/column-type"
 import useRepresentationStore from "@/stores/representation-store"
