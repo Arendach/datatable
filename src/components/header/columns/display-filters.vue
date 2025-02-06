@@ -4,75 +4,83 @@
     <th v-if="representation.hasCheckbox"></th>
     <template v-for="column in dataTable.columns">
       <th
-          v-if="column.show"
-          :key="column.field"
-          :style="{ width: column.width, 'min-width': column.minWidth, 'max-width': column.maxWidth }"
+        v-if="column.show"
+        :key="column.field"
+        :style="{ width: column.width, 'max-width': column.maxWidth }"
       >
         <div class="input-group" v-if="column.filter">
-          <!-- Поле вводу для текстових значень -->
+          <!-- STRING_INPUT -->
           <input
-              v-if="column.type === ColumnType.STRING"
-              v-model.trim="column.filterValue"
-              type="text"
-              class="form-control form-control-sm"
-              @input="eventBus.emit(Events.FILTERS_UPDATED)"
+            v-if="column.filterType === FilterType.STRING_INPUT"
+            v-model.trim="column.filterValue"
+            type="text"
+            class="form-control form-control-xs"
+            @input="eventBus.emit(Events.FILTERS_UPDATED)"
           />
 
-          <!-- Поле вводу для числових значень -->
+          <!-- NUMBER_INPUT -->
           <input
-              v-if="column.type === ColumnType.NUMBER"
-              v-model.number.trim="column.filterValue"
-              type="number"
-              class="form-control form-control-sm"
-              @input="eventBus.emit(Events.FILTERS_UPDATED)"
+            v-if="column.filterType === FilterType.NUMBER_INPUT"
+            v-model.number.trim="column.filterValue"
+            type="number"
+            class="form-control form-control-xs"
+            @input="eventBus.emit(Events.FILTERS_UPDATED)"
           />
 
-          <!-- Поле для дати -->
+          <!-- DATE_PICKER -->
           <vue-date-picker
-            v-else-if="column.type === ColumnType.DATE"
+            v-else-if="column.filterType === FilterType.DATE_PICKER"
             v-model="column.filterValue"
             @change="eventBus.emit(Events.FILTERS_UPDATED)"
             :preview-format="displayDate"
             :format="displayDate"
             :auto-apply="true"
             :enable-time-picker="false"
+            input-class="form-control-xs"
           ></vue-date-picker>
 
-          <!-- Поле для булевих значень -->
-          <select
-              v-else-if="column.type === ColumnType.BOOLEAN"
-              v-model="column.filterValue"
-              class="form-control form-control-sm"
-              @change="eventBus.emit(Events.FILTERS_UPDATED)"
-          >
-            <option :value="undefined">Всі</option>
-            <option :value="true">Так</option>
-            <option :value="false">Ні</option>
-          </select>
-
-          <!-- Поле для діапазону дат -->
+          <!-- DATE_RANGE -->
           <vue-date-picker
-            v-else-if="column.type === ColumnType.DATE_RANGE"
+            v-else-if="column.filterType == FilterType.DATE_RANGE"
             v-model="column.filterValue"
             @change="eventBus.emit(Events.FILTERS_UPDATED)"
             :enable-time-picker="false"
             :preview-format="displayDateRange"
             :format="displayDateRange"
             range
+            input-class="form-control-xs"
           ></vue-date-picker>
+
+          <!-- SLIDER_BOOLEAN -->
+          <boolean-toggle
+            v-else-if="column.filterType === FilterType.SLIDER_BOOLEAN"
+            :model-value="column.filterValue"
+            @update:modelValue="value => {column.filterValue = value; eventBus.emit(Events.FILTERS_UPDATED)}"/>
+
+          <!-- SELECT_BOOLEAN -->
+          <select
+            v-else-if="column.filterType === FilterType.SELECT_BOOLEAN"
+            v-model="column.filterValue"
+            class="form-control form-control-xs"
+            @change="eventBus.emit(Events.FILTERS_UPDATED)"
+          >
+            <option :value="undefined">-</option>
+            <option :value="true">Так</option>
+            <option :value="false">Ні</option>
+          </select>
 
           <!-- Кнопка для додаткових фільтрів -->
           <button
-              v-if="column.type !== ColumnType.BOOLEAN && column.type !== ColumnType.DATE_RANGE"
-              class="btn btn-sm btn-outline-secondary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              data-bs-auto-close="true"
+            v-if="column.type !== ColumnType.BOOLEAN && column.filterType !== FilterType.DATE_RANGE"
+            class="btn btn-xs btn-outline-secondary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            data-bs-auto-close="true"
           ></button>
 
           <!-- Додаткові фільтри -->
-          <column-filter v-if="column.type !== ColumnType.DATE_RANGE" :column="column"/>
+          <column-filter v-if="column.type !== ColumnType.BOOLEAN && column.filterType !== FilterType.DATE_RANGE" :column="column"/>
         </div>
       </th>
     </template>
@@ -91,6 +99,8 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import displayDate from "@/utility/display-date"
 import displayDateRange from "@/utility/display-date-range"
+import BooleanToggle from "@/components/header/filters/boolean-toggle.vue";
+import FilterType from "@/types/filter-type";
 
 const representation = useRepresentationStore()
 const filter = useFilterStore()

@@ -1,10 +1,9 @@
 enum ColumnType {
-  DATE = 'date',
-  STRING = 'string',
   NUMBER = 'number',
+  STRING = 'string',
   BOOLEAN = 'boolean',
-  DATE_RANGE = 'date-range',
-  PICTURE = 'picture'
+  DATE = 'date',
+  PICTURE = 'picture',
 }
 
 export default ColumnType

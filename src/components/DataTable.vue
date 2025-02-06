@@ -1,6 +1,6 @@
 <template>
   <div class="table-responsive">
-    <table class="table table-sm table-bordered" :id="props.uniqueId">
+    <table class="table table-xs table-bordered" :id="props.uniqueId">
       <display-thead/>
       <display-tbody/>
       <display-tfoot/>
@@ -30,11 +30,11 @@ import applyBackendFilter from "@/filter/backend"
 const props = defineProps<DataTableProps>()
 
 // set default values for column
-props.columns.map(normalizeColumn)
+const columns = props.columns.map(normalizeColumn)
 
 // dataTableStore
 const dataTableStore = useDataTableStore()
-dataTableStore.setColumns(props.columns)
+dataTableStore.setColumns(columns)
 dataTableStore.setRows(props.rows ?? [])
 dataTableStore.setIsServerMode(props.isServerMode)
 dataTableStore.setEndpoint(props.endpoint ?? '')

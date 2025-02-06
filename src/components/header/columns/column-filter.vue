@@ -1,5 +1,5 @@
 <template>
-  <ul class="dropdown-menu dropdown-menu-sm-end">
+  <ul class="dropdown-menu dropdown-menu-xs dropdown-menu-sm-end">
     <li class="dropdown-item" :class="{ active: column.condition === Condition.WITHOUT }">
       <div @click="select(Condition.WITHOUT)">Без фільтра</div>
     </li>

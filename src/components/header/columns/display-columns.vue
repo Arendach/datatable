@@ -11,10 +11,10 @@
     <template v-for="column in dataTable.columns" :key="column.field">
       <th v-if="column.show" :class="getColumnClasses(column)" :style="getColumnStyles(column)">
         <div
-          :class="column.headerClass || ''"
+          class="form-header-nowrap"
           @click="column.sort && filter.useSorting ? sortChange(column.field) : null"
         >
-          <div v-if="column.selectable" class="form-check">
+          <div v-if="column.selectable" class="form-check form-check-xs">
             <input class="form-check-input" type="checkbox" :value="column.field" v-model="selectedColumns" @click.stop/>
             <label class="form-check-label">{{ column.title }}</label>
             <display-sort-direction
@@ -24,7 +24,7 @@
               :sort-direction="filter.currentSortDirection"/>
           </div>
 
-          <div v-else>
+          <div class="form-header-nowrap" v-else>
             {{ column.title }}
             <display-sort-direction
               :column="column"

@@ -1,3 +1,184 @@
 .centered {
   text-align: center;
 }
+
+/* Формат для дуже компактних (extra small) інпутів */
+.form-control-xs {
+  /* Зменшуємо висоту */
+  height: 24px !important;
+  /* Зменшений padding */
+  padding: 0.25rem 0.5rem !important;
+  /* Менший розмір шрифту */
+  font-size: 0.75rem !important;
+  /* Зменшений line-height */
+  line-height: 1.2 !important;
+  /* Менший border-radius */
+  border-radius: 0.2rem !important;
+}
+
+/* Для кнопок */
+.btn-xs {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1.2 !important;
+  border-radius: 0.2rem !important;
+}
+
+/* Для елементів input-group */
+.input-group-xs > .form-control,
+.input-group-xs > .btn,
+.input-group-xs > .dropdown-toggle {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1.2 !important;
+}
+
+/* Створюємо клас для компактного випадаючого меню */
+.dropdown-menu-xs .dropdown-item {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1.2 !important;
+}
+
+/* Створюємо клас для компактної таблиці */
+.table-xs {
+  font-size: 0.75rem !important; /* зменшення розміру шрифту (75% від стандартного) */
+}
+
+.table-xs th,
+.table-xs td {
+  padding: 0.5rem !important;  /* зменшення відступів (замість стандартних 0.75rem) */
+}
+
+/* За потреби можна зменшити відступи таблиці в цілому */
+.table-xs {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Також можна зменшити відступи заголовків, якщо потрібно */
+.table-xs thead th {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+
+/* Компактна версія form-check */
+.form-check-xs {
+  display: inline-flex !important;          /* Вирівнювання в один рядок */
+  align-items: center;           /* Вертикальне вирівнювання */
+  margin-bottom: 0 !important;              /* Забираємо додаткові відступи */
+  font-size: 0.75rem !important; /* Зменшений розмір шрифту */
+  line-height: 1 !important;      /* Менший line-height */
+}
+
+/* Зменшуємо розміри самого чекбокса */
+.form-check-xs .form-check-input {
+  width: 1rem !important;
+  height: 1rem !important;
+  margin-top: 0;               /* Забираємо відступ зверху */
+  margin-right: 0.25rem;       /* Відступ праворуч для відділення від тексту */
+}
+
+/* Зменшуємо розміри мітки (label) */
+.form-check-xs .form-check-label {
+  margin-bottom: 0;            /* Забираємо нижній відступ */
+  font-size: 0.75rem !important;
+  line-height: 1 !important;
+}
+
+
+/* Для кастомного boolean-перемикача, зменшуємо розмір кнопок */
+.boolean-toggle-xs .toggle-btn {
+  padding: 0.25rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* Приклад додаткового стилю для boolean-перемикача */
+.boolean-toggle-xs {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 80px; /* менша ширина */
+}
+
+.boolean-toggle-xs .toggle-btn {
+  flex: 1;
+  padding: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-weight: 500;
+  background-color: #f0f0f0;
+}
+
+.boolean-toggle-xs .toggle-btn.true.active {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.boolean-toggle-xs .toggle-btn.false.active {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.boolean-toggle-xs .toggle-btn.null.active {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.boolean-toggle-xs .toggle-btn:not(:last-child) {
+  border-right: 1px solid #ccc;
+}
+
+.form-header-nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Зменшуємо розміри головного контейнера датапікера */
+.dp__main.dp__theme_light {
+  font-size: 0.75rem !important; /* Зменшений розмір шрифту для всього компонента */
+  padding: 0.25rem !important;
+}
+
+/* Зменшуємо розміри input-поля всередині датапікера */
+.dp__input {
+  height: 24px !important;
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1.2 !important;
+  border-radius: 0.2rem !important;
+}
+
+/* Якщо є іконки чи кнопки всередині input (наприклад, календарна іконка) */
+.dp__input_icon_pad {
+  padding: 0.25rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* Зменшуємо розміри календаря/випадаючого меню */
+.dp__menu,
+.dp__menu_inner,
+.dp__menu .dp__btn {
+  font-size: 0.75rem !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+/* Зменшуємо розміри кнопок дій (як Cancel, Select) */
+.dp__action_button {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* Якщо потрібно зменшити відступи у заголовку календаря */
+.dp__calendar_header_item {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* За бажанням можна ще скоригувати відступи зовнішніх елементів */
+.dp__outer_menu_wrap {
+  padding: 0.25rem !important;
+}

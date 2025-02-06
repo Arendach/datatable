@@ -9,10 +9,10 @@
 
           <div class="col d-flex align-items-center gap-2">
             <!-- Search field -->
-            <div class="input-group input-group-sm flex-grow-1">
+            <div class="input-group input-group-xs flex-grow-1">
               <input
                 type="text"
-                class="form-control form-control-sm"
+                class="form-control form-control-xs"
                 placeholder="Please enter text to filter"
                 v-model="filter.search"
                 @input="eventBus.emit(Events.SEARCH_CHANGED)"
@@ -24,7 +24,7 @@
             <div class="btn-group">
               <button
                 type="button"
-                class="btn btn-outline-primary dropdown-toggle btn-sm"
+                class="btn btn-outline-primary dropdown-toggle btn-xs"
                 data-bs-toggle="dropdown"
               >
                 Columns
@@ -53,7 +53,7 @@
             <button
               @click="exportToEXCEL"
               title="Export to EXCEL"
-              class="btn btn-outline-success btn-sm"
+              class="btn btn-outline-success btn-xs"
             >
               Export
             </button>

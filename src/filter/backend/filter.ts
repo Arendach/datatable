@@ -8,6 +8,7 @@ import applyBoolean from "@/filter/backend/filters/boolean"
 import applyDate from "@/filter/backend/filters/date"
 import applyIsEmpty from "@/filter/backend/filters/is-empty"
 import applyIsNotEmpty from "@/filter/backend/filters/is-not-empty"
+import applyNumber from "@/filter/backend/filters/number"
 import {BackendParams} from "@/types/backend-params"
 
 function applyFilter(params: Partial<BackendParams>): Partial<BackendParams> {
@@ -24,6 +25,7 @@ function applyFilter(params: Partial<BackendParams>): Partial<BackendParams> {
           filters.push(applyDate(column))
           break
         case ColumnType.NUMBER:
+          filters.push(applyNumber(column))
           break
         case ColumnType.STRING:
           filters.push(applyString(column))
