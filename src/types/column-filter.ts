@@ -4,16 +4,16 @@ import {FilterOption} from "@/types/filter-option"
 
 export default interface ColumnFilter {
   // whether to use filtering
-  use: boolean
+  use?: boolean
 
   // whether to include the column in the search
-  searchable: boolean
+  searchable?: boolean
 
   // filter condition
   condition?: Condition
 
   // filter value
-  value: any
+  value?: any
 
   // filter view render
   type?: FilterType

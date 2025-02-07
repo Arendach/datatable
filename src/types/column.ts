@@ -26,9 +26,6 @@ export interface Column {
   // show on table (switch in table header)
   show?: boolean
 
-  // export to EXCEL
-  exportable?: boolean
-
   // selectable (example: for mass editing)
   selectable?: boolean
 
