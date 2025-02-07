@@ -4,8 +4,8 @@ import dateFormat from "@/utility/date-format"
 import Condition from "@/types/condition"
 
 function filterDate(rows: Array<Object>, column: Column): Array<Object> {
-    if (column.filterValue && !column.condition) {
-        column.condition = Condition.EQUAL
+    if (column.filter.value && !column.filter.condition) {
+        column.filter.condition = Condition.EQUAL
     }
 
     const conditions: Record<string, (rowValue: string, filterValue: string) => boolean> = {
@@ -15,7 +15,7 @@ function filterDate(rows: Array<Object>, column: Column): Array<Object> {
         [Condition.LESS_THAN]: (rowValue, filterValue) => rowValue < filterValue,
     }
 
-    const filterCondition = conditions[column.condition]
+    const filterCondition = conditions[column.filter.condition]
 
     if (!filterCondition) return rows
 
@@ -23,7 +23,7 @@ function filterDate(rows: Array<Object>, column: Column): Array<Object> {
         const cellValue = displayCellValue(item, column.field)
         const formattedValue = cellValue ? dateFormat(cellValue) : null
 
-        return formattedValue && filterCondition(formattedValue, column.filterValue)
+        return formattedValue && filterCondition(formattedValue, column.filter.value)
     })
 }
 

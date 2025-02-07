@@ -4,6 +4,8 @@
       <div class="container-fluid">
         <div class="row p-2">
           <div class="col">
+            <display-selected-filters/>
+
             <slot name="control"></slot>
           </div>
 
@@ -30,10 +32,10 @@
                 Columns
               </button>
               <ul class="dropdown-menu">
-                <li class="dropdown-item">
+<!--                <li class="dropdown-item">
                   <input type="checkbox" v-model="hasAutoListing">
                   <span class="ms-2">№ з/п</span>
-                </li>
+                </li>-->
                 <li class="dropdown-item">
                   <input type="checkbox" v-model="hasCheckbox">
                   <span class="ms-2">Чекбокс</span>
@@ -48,15 +50,6 @@
                 </li>
               </ul>
             </div>
-
-            <!-- Export to Excel -->
-            <button
-              @click="exportToEXCEL"
-              title="Export to EXCEL"
-              class="btn btn-outline-success btn-xs"
-            >
-              Export
-            </button>
           </div>
         </div>
       </div>
@@ -69,10 +62,10 @@ import useDataTableStore from "@/stores/data-table-store"
 import useRepresentationStore from "@/stores/representation-store"
 import useFilterStore from "@/stores/filter-store"
 import {ref, watch} from "vue"
-import exportToEXCEL from "@/utility/export-to-excel"
 import {useColumnCount} from "@/composables/use-column-count"
 import useEventBus from "@/composables/use-event-bus"
 import Events from "@/types/events"
+import DisplaySelectedFilters from "@/components/header/display-selected-filters.vue"
 
 const dataTable = useDataTableStore()
 const representation = useRepresentationStore()

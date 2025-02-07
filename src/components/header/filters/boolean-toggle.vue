@@ -6,7 +6,7 @@
       :class="{ active: modelValue === true }"
       @click="updateValue(true)"
     >
-      Так
+      Yes
     </button>
     <button
       type="button"
@@ -22,7 +22,7 @@
       :class="{ active: modelValue === false }"
       @click="updateValue(false)"
     >
-      Ні
+      No
     </button>
   </div>
 </template>

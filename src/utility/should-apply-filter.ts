@@ -1,18 +1,16 @@
 import {Column} from "@/types/column"
 import Condition from "@/types/condition"
-import ColumnType from "@/types/column-type"
 
 function shouldApplyFilter(column: Column): boolean {
   return (
-    column.filter &&
+    column.filter.use &&
     (
-      column.filterValue !== undefined &&
-      column.filterValue !== null &&
-      column.filterValue !== ''
+      column.filter.value !== undefined &&
+      column.filter.value !== null &&
+      column.filter.value !== ''
     ) ||
-    column.condition === Condition.IS_EMPTY ||
-    column.condition === Condition.IS_NOT_EMPTY ||
-    column.type === ColumnType.DATE_RANGE
+    column.filter.condition === Condition.IS_EMPTY ||
+    column.filter.condition === Condition.IS_NOT_EMPTY
   )
 }
 

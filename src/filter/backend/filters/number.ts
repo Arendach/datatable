@@ -3,10 +3,10 @@ import Condition from "@/types/condition"
 import {FilterItem} from "@/types/filter-item"
 
 function applyNumber(column: Column): null | FilterItem {
-  if (!column.filterValue) return null
+  if (!column.filter.value) return null
 
-  const condition = column.condition || Condition.EQUAL
-  const filterValue = parseFloat(column.filterValue)
+  const condition = column.filter.condition || Condition.EQUAL
+  const filterValue = parseFloat(column.filter.value)
 
   return {
     field: column.field,

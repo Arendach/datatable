@@ -7,7 +7,7 @@ function isEmptyFilter(rows: Array<Object>, column: Column): Array<Object> {
         return value == null || value === ''
     })
 
-    column.filterValue = ''
+    column.filter.value = ''
 
     return filteredRows
 }

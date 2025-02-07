@@ -1,5 +1,5 @@
 <template>
-  <thead class="table-light sticky-top top-0" style="z-index: 10">
+  <thead class="table-light">
   <table-header/>
   <display-columns/>
   <display-filters/>

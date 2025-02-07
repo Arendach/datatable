@@ -1,6 +1,5 @@
 import ColumnType from "@/types/column-type"
-import Condition from "@/types/condition"
-import FilterType from "@/types/filter-type"
+import ColumnFilter from "@/types/column-filter"
 
 export interface Column {
   // field from object for display
@@ -13,10 +12,7 @@ export interface Column {
   type?: ColumnType
 
   // use filter for column
-  filter?: boolean
-
-  // use this field for search
-  search?: boolean
+  filter?: boolean | ColumnFilter
 
   // display field as html
   html?: boolean
@@ -36,9 +32,6 @@ export interface Column {
   // selectable (example: for mass editing)
   selectable?: boolean
 
-  // filter condition
-  condition?: Condition
-
   // callback for render cell
   cellRender?: Function
 
@@ -50,10 +43,4 @@ export interface Column {
 
   // column max width
   maxWidth?: string
-
-  // filter column
-  filterValue?: any
-
-  // filter view render
-  filterType?: FilterType
 }

@@ -2,7 +2,7 @@ import {Column} from "@/types/column"
 import displayCellValue from "@/utility/display-cell-value"
 
 function isNotEmptyFilter(rows: Array<object>, column: Column): Array<object> {
-    column.filterValue = ''
+    column.filter.value = ''
 
     return rows.filter((item) => {
         const value = displayCellValue(item, column.field)

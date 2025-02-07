@@ -1,6 +1,8 @@
 <template>
   <div>
-    <img :src="url" :alt="url" style="height: 100px">
+    <a :href="url" target="_blank">
+      <img :src="url" :alt="url" style="height: 100px">
+    </a>
   </div>
 </template>
 

@@ -1,12 +1,17 @@
 import {Column} from "@/types/column"
 import Condition from "@/types/condition"
 import {FilterItem} from "@/types/filter-item"
+import {FilterOption} from "@/types/filter-option";
 
 function applyString(column: Column): null | FilterItem {
-  if (!column.filterValue) return null
+  if (!column.filter.value) return null
 
-  const condition = column.condition || Condition.CONTAIN
-  const filterValue = column.filterValue
+  const condition = column.filter.condition || Condition.CONTAIN
+  let filterValue = column.filter.value
+
+  if (condition === Condition.IN) {
+    filterValue = filterValue.map((option: FilterOption)=> option.value)
+  }
 
   return {
     field: column.field,

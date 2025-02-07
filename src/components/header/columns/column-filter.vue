@@ -1,10 +1,10 @@
 <template>
   <ul class="dropdown-menu dropdown-menu-xs dropdown-menu-sm-end">
-    <li class="dropdown-item" :class="{ active: column.condition === Condition.WITHOUT }">
+    <li class="dropdown-item" :class="{ active: column.filter.condition === Condition.WITHOUT }">
       <div @click="select(Condition.WITHOUT)">Без фільтра</div>
     </li>
     <template v-for="(label, condition) in conditions[column.type || 'default']" :key="condition">
-      <li class="dropdown-item" :class="{ active: column.condition === condition }">
+      <li class="dropdown-item" :class="{ active: column.filter.condition === condition }">
         <div @click="select(condition)">{{ label }}</div>
       </li>
     </template>
@@ -42,18 +42,18 @@ const conditions = reactive({
   date: {
     [Condition.EQUAL]: 'Рівно',
     [Condition.NOT_EQUAL]: 'Не рівно',
-    [Condition.GREATER_THAN]: 'Старіші за',
-    [Condition.LESS_THAN]: 'Новіші за',
+    [Condition.GREATER_THAN]: 'Новіші за',
+    [Condition.LESS_THAN]: 'Старіші за',
   },
 })
 
 const props = defineProps<{ column: Column }>()
 
 const select = (condition: Condition) => {
-  props.column.condition = condition
+  props.column.filter.condition = condition
 
   if (condition === Condition.WITHOUT) {
-    props.column.filterValue = ''
+    props.column.filter.value = ''
   }
 
   useEventBus().emit(Events.FILTERS_UPDATED)

@@ -36,9 +36,9 @@ function filtering(rows: Array<object>): Array<object> {
             }
 
             // Обробка специфічних умов
-            if (column.condition === Condition.IS_EMPTY) {
+            if (column.filter.condition === Condition.IS_EMPTY) {
                 rows = isEmptyFilter(rows, column)
-            } else if (column.condition === Condition.IS_NOT_EMPTY) {
+            } else if (column.filter.condition === Condition.IS_NOT_EMPTY) {
                 rows = isNotEmptyFilter(rows, column)
             }
         }

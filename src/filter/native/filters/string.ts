@@ -3,10 +3,10 @@ import displayCellValue from "@/utility/display-cell-value"
 import Condition from "@/types/condition"
 
 function filterString(rows: Array<Object>, column: Column): Array<Object> {
-    if (!column.filterValue) return rows
+    if (!column.filter.value) return rows
 
-    const condition = column.condition || Condition.CONTAIN
-    const filterValue = column.filterValue.toLowerCase()
+    const condition = column.filter.condition || Condition.CONTAIN
+    const filterValue = column.filter.value.toLowerCase()
 
     return rows.filter((item) => {
         const cellValue = displayCellValue(item, column.field)?.toString().toLowerCase()

@@ -13,6 +13,7 @@ enum Condition {
   IS_EMPTY = 'is_empty',
   IS_NOT_EMPTY = 'is_not_empty',
   BETWEEN = 'between',
+  IN = 'in',
 }
 
 export default Condition

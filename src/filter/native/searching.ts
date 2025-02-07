@@ -19,7 +19,7 @@ function searching(rows: Array<Object>): Array<Object> {
 
 function getSearchableFields(columns: Array<Column>): Array<string> {
     return columns
-        .filter((column: Column) => column.search && column.show)
+        .filter((column: Column) => column.filter.searchable && column.show)
         .map((column: Column) => column.field)
 }
 

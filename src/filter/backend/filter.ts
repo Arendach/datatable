@@ -32,9 +32,9 @@ function applyFilter(params: Partial<BackendParams>): Partial<BackendParams> {
           break
       }
 
-      if (column.condition === Condition.IS_EMPTY) {
+      if (column.filter.condition === Condition.IS_EMPTY) {
         filters.push(applyIsEmpty(column))
-      } else if (column.condition === Condition.IS_NOT_EMPTY) {
+      } else if (column.filter.condition === Condition.IS_NOT_EMPTY) {
         filters.push(applyIsNotEmpty(column))
       }
     }

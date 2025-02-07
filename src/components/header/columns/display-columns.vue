@@ -1,15 +1,15 @@
 <template>
   <tr class="exportable">
-    <th v-if="representation.hasAutoListing" class="centered exportable">№</th>
+    <th v-if="representation.hasAutoListing" class="centered exportable middle">№</th>
 
-    <th v-if="representation.hasCheckbox" class="centered">
+    <th v-if="representation.hasCheckbox" class="centered middle">
       <div class="form-check">
         <input class="form-check-input" :checked="dataTable.isAllSelected" @change="toggleSelectAll" type="checkbox"/>
       </div>
     </th>
 
     <template v-for="column in dataTable.columns" :key="column.field">
-      <th v-if="column.show" :class="getColumnClasses(column)" :style="getColumnStyles(column)">
+      <th v-if="column.show" :class="getColumnClasses(column)" :style="getColumnStyles(column)" class="middle">
         <div
           class="form-header-nowrap"
           @click="column.sort && filter.useSorting ? sortChange(column.field) : null"
@@ -91,7 +91,6 @@ const getColumnClasses = (column: Column) => [
 
 const getColumnStyles = (column: Column) => ({
   'width': column.width,
-  'min-width': column.minWidth,
   'max-width': column.maxWidth
 })
 </script>
