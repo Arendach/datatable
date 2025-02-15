@@ -1,6 +1,7 @@
 <template>
   <tr class="exportable">
-    <th v-if="representation.hasAutoListing" class="centered exportable middle">№</th>
+    <th v-if="representation.hasExpand" class="centered middle"></th>
+    <th v-if="representation.hasAutoListing" class="centered middle">№</th>
 
     <th v-if="representation.hasCheckbox" class="centered middle">
       <div class="form-check">

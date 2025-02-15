@@ -8,6 +8,7 @@ export function useColumnCount() {
 
     return computed(() => {
         let count = dataTable.columns.length
+        if (representation.hasExpand) count++
         if (representation.hasAutoListing) count++
         if (representation.hasCheckbox) count++
 

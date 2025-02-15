@@ -3,11 +3,7 @@
     style="vertical-align: middle"
     v-if="column.show"
     :key="column.field"
-    :class="[
-        typeof cellClass === 'function' ? cellClass(item) : '',
-        column.exportable ? 'exportable' : '',
-        column.className ? column.className : '',
-      ]"
+    :class="[typeof cellClass === 'function' ? cellClass(item) : '', column.className ? column.className : '']"
   >
     <!-- Slot render -->
     <template v-if="slots.hasSlot(column.field)">

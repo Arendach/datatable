@@ -10,12 +10,13 @@ import applyIsEmpty from "@/filter/backend/filters/is-empty"
 import applyIsNotEmpty from "@/filter/backend/filters/is-not-empty"
 import applyNumber from "@/filter/backend/filters/number"
 import {BackendParams} from "@/types/backend-params"
+import ColumnFilter from "@/types/column-filter"
 
 function applyFilter(params: Partial<BackendParams>): Partial<BackendParams> {
   const dataTable = useDataTableStore()
   let filters = []
 
-  dataTable.columns.forEach((column: Column) => {
+  dataTable.columns.forEach((column: Column & { filter: ColumnFilter }) => {
     if (shouldApplyFilter(column)) {
       switch (column.type) {
         case ColumnType.BOOLEAN:

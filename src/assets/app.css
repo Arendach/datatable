@@ -6,6 +6,13 @@
   vertical-align: middle;
 }
 
+.no-data {
+  text-align: center;
+  height: 100px;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
 /* Формат для дуже компактних (extra small) інпутів */
 .form-control-xs {
   /* Зменшуємо висоту */
@@ -348,4 +355,26 @@
 
 .multiselect-wrapper {
   min-height: auto !important;
+}
+
+/* Стилі для виїзду рядка */
+.expand-enter-active, .expand-leave-active {
+  transition: max-height 0.3s ease-out, transform 0.3s ease-out, opacity 0.3s ease-out;
+  max-height: 100px; /* Висота відкритого рядка */
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.expand-enter-from, .expand-leave-to {
+  max-height: 0;
+  transform: translateY(-10px); /* Ефект виїзду */
+  opacity: 0;
+  overflow: hidden;
+}
+
+.expanded-content {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-left: 4px solid #007bff;
+  font-size: 14px;
 }

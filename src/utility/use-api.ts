@@ -51,7 +51,7 @@ const ResponseHandler = (res: any) => {
 
 export default function useApi() {
   return {
-    async get(url: string, queryParams: Record<string, string> = {}, options: RequestInit = {}) {
+    async get(url: string, queryParams: any = {}, options: RequestInit = {}) {
       const urlObj = new URL(url, window.location.origin)
 
       const originalParams = Object.fromEntries(urlObj.searchParams.entries())

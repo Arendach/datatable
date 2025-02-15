@@ -20,7 +20,8 @@ export default function normalizeFilter(column: Column): ColumnFilter {
     ...(typeof column.filter === "boolean" ? {use: column.filter} : column.filter),
   }
 
-  // Призначаємо типи фільтрів залежно від типу колонки
+  filter.by ??= column.field
+
   switch (column.type) {
     case ColumnType.NUMBER:
       filter.type ??= FilterType.NUMBER_INPUT

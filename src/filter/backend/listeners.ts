@@ -1,7 +1,7 @@
 import useEventBus from "@/composables/use-event-bus"
 import Events from "@/types/events"
 import applyBackendFilter from "@/filter/backend/index"
-import usePaginationStore from "@/stores/pagination-store";
+import usePaginationStore from "@/stores/pagination-store"
 
 const applyBackendListeners = () => {
   const pagination = usePaginationStore()

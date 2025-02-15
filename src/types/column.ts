@@ -12,7 +12,7 @@ export interface Column {
   type?: ColumnType
 
   // use filter for column
-  filter?: boolean | ColumnFilter
+  filter?: ColumnFilter | boolean
 
   // display field as html
   html?: boolean

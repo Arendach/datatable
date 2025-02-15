@@ -56,6 +56,8 @@ paginationStore.setProps(props.pagination)
 const slotsStore = useSlotsStore()
 slotsStore.setSlots(useSlots())
 
+representationStore.setProps({hasExpand: slotsStore.hasSlot('expand')})
+
 if (props.isServerMode) {
   applyBackendListeners()
   applyBackendFilter(false)

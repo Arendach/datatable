@@ -1,5 +1,6 @@
 <template>
   <tr v-if="filter.useFiltering">
+    <th class="middle" v-if="representation.hasExpand"></th>
     <th class="middle" v-if="representation.hasAutoListing"></th>
     <th class="middle" v-if="representation.hasCheckbox"></th>
     <template v-for="column in dataTable.columns" :key="column.field">
@@ -51,6 +52,7 @@
             value-prop="value"
             track-by="value"
             :object="true"
+            v-model="column.filter.value"
             @change="(value) => {column.filter.value = value.length ? value : null; eventBus.emit(Events.FILTERS_UPDATED)}"
           />
 
