@@ -41,6 +41,9 @@
     "vite": "^6.0.1",
     "vue-tsc": "^2.1.10"
   },
+  "peerDependencies": {
+    "pinia": "^3.0.1"
+  },
   "files": [
     "src",
     "dist",
@@ -50,7 +53,6 @@
     "@vueform/multiselect": "^2.6.11",
     "@vuepic/vue-datepicker": "^10.0.0",
     "dateformat": "^5.0.3",
-    "pinia": "^3.0.1",
     "store2": "^2.14.3",
     "vue": "^3.5.13"
   }

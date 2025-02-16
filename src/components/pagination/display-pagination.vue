@@ -39,14 +39,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import usePaginationStore from "@/stores/pagination-store"
 import useEventBus from '@/composables/use-event-bus'
 import Events from "@/types/events"
 
 const paginate = usePaginationStore()
 
-const changePage = (newPage) => {
+const changePage = (newPage: number) => {
   paginate.page = newPage
   useEventBus().emit(Events.PAGE_CHANGED)
 }
