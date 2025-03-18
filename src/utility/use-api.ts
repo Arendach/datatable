@@ -1,3 +1,5 @@
+import store from "store2"
+
 export function jsonToQuery(params: Record<string, any>, prefix: string = ''): string {
   const queryParts: string[] = []
 
@@ -30,6 +32,7 @@ export function jsonToQuery(params: Record<string, any>, prefix: string = ''): s
 const DefaultHeaders: HeadersInit = {
   'Content-Type': 'application/json',
   'X-Requested-With': 'XMLHttpRequest',
+  'Authorization': 'Bearer ' + store('token'),
 }
 
 const DefaultOptions: RequestInit = {
@@ -40,8 +43,8 @@ const DefaultOptions: RequestInit = {
 }
 
 const ResponseHandler = (res: any) => {
-  if (res.status === 401 && window.location.pathname !== '/login') {
-    window.location.href = '/login'
+  if (res.status === 401) {
+    console.error('Fetch data from server failed! Unauthorized!')
   }
 
   if (!res.ok) throw res
