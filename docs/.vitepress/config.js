@@ -23,6 +23,12 @@ export default {
           {text: 'Custom fetch data', link: '/server-mode/custom-fetch-data'},
         ]
       },
+      {
+        text: 'Additional',
+        items: [
+          {text: 'Usage slots', link: '/additional/slots'},
+        ]
+      },
     ],
     socialLinks: [
       {icon: 'github', link: 'https://github.com/Arendach/datatable'}

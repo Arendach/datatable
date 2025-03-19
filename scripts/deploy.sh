@@ -8,7 +8,7 @@ cd docs/.vitepress/dist
 
 if [ ! -d ".git" ]; then
   git init
-  git remote add origin git@github.com:Arendach/datatable.git
+  git remote add origin ssh://git@github.com/Arendach/datatable.git
 fi
 
 git add -A

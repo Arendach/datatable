@@ -119,4 +119,4 @@ The `representation` prop customizes the table’s appearance and behavior.
 ---
 
 This guide provides an overview of the main features available in the `DataTable` component. For further details, check
-the individual guides on [Pagination](/base/pagination), [Filtering](/base/filtering), and [Server Mode](/server-mode).
+the individual guides on [Pagination](/base/pagination), [Filtering](/base/filtering), and [Server Mode](/server-mode/index).

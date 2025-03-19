@@ -11,12 +11,12 @@ Welcome to the **Ares DataTable** documentation! This library is a highly custom
 - **Highly Configurable** – Fine-tune table behavior through props like `columns`, `pagination`, `filter`, and `representation`.
 
 ## Getting Started
-To start using **Ares DataTable**, check out the [Installation Guide](/getting-started/installation) and explore the core concepts in:
+To start using **Ares DataTable**, check out the [Installation Guide](/installation) and explore the core concepts in:
 
 - [Column Configuration](/base/columns)
 - [Filtering](/base/filtering)
 - [Pagination](/base/pagination)
-- [Server Mode](/server-mode)
+- [Server Mode](/server-mode/index)
 
 For advanced customization, see the [Slots & Custom Rendering](/additional/slots) guide.
 

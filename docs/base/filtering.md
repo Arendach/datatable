@@ -125,4 +125,4 @@ Example:
 ```
 This ensures that filtering is applied based on `user.id`, even though the displayed column is `user.name`.
 
-For more details, see the [Server Mode Guide](/server-mode).
+For more details, see the [Server Mode Guide](/server-mode/index).
