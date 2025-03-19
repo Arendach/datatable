@@ -18,7 +18,8 @@
     "type-check": "vue-tsc --noEmit",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "docs:deploy": "bash scripts/deploy.sh"
+    "docs:deploy": "bash scripts/deploy.sh",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
