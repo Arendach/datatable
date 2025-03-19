@@ -15,7 +15,10 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "type-check": "vue-tsc --noEmit"
+    "type-check": "vue-tsc --noEmit",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "docs:deploy": "bash scripts/deploy.sh"
   },
   "repository": {
     "type": "git",
@@ -39,6 +42,7 @@
     "sass-embedded": "^1.81.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.1",
+    "vitepress": "^1.6.3",
     "vue-tsc": "^2.1.10"
   },
   "peerDependencies": {

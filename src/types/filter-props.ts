@@ -6,8 +6,6 @@ export interface FilterProps {
   sortColumn: string | null
   sortDirection: SortDirection
   useFiltering: boolean
-  useSelectRowOnClick: boolean
-  usePersistSelection: boolean
   currentSortColumn: string | null
   currentSortDirection: SortDirection
 }

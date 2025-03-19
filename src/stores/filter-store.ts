@@ -7,8 +7,6 @@ interface FilterStore {
   sortColumn: string | null
   sortDirection: SortDirection
   useFiltering: boolean
-  useSelectRowOnClick: boolean
-  usePersistSelection: boolean
   currentSortColumn: string | null
   currentSortDirection: SortDirection
 }
@@ -20,8 +18,6 @@ const useFilterStore = defineStore('filter', {
     sortColumn: null,
     sortDirection: SortDirection.DEFAULT,
     useFiltering: false,
-    useSelectRowOnClick: false,
-    usePersistSelection: false,
     currentSortColumn: null,
     currentSortDirection: SortDirection.DEFAULT,
   }),
