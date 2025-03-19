@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import {Column} from "@/types/column"
 import areArraysIdentical from "@/utility/are-arrays-identical"
-import useFilterStore from "@/stores/filter-store";
+import useFilterStore from "@/stores/filter-store"
 
 const useDataTableStore = defineStore('dataTable', {
   state: () => ({
@@ -12,7 +12,7 @@ const useDataTableStore = defineStore('dataTable', {
     filteredItems: [] as Array<Object>,
     paginatedItems: [] as Array<Object>,
     isLoading: true,
-    endpoint: '' as string,
+    fetchRows: '',
     expandedRows: [],
   }),
   getters: {
@@ -34,8 +34,8 @@ const useDataTableStore = defineStore('dataTable', {
     setRows(rows: Array<Object>): void {
       this.rows = rows
     },
-    setEndpoint(endpoint: string): void {
-      this.endpoint = endpoint
+    setFetchRows(fetchRows): void {
+      this.fetchRows = fetchRows
     },
     init() {
       this.filteredItems = this.rows

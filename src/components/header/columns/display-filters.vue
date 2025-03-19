@@ -9,7 +9,7 @@
         v-if="column.show"
         :style="{ width: column.width, 'max-width': column.maxWidth }"
       >
-        <div class="input-group input-group-xs" v-if="column.filter">
+        <div class="input-group input-group-xs" v-if="column.filter.use">
           <!-- STRING_INPUT -->
           <input
             v-if="column.filter.type === FilterType.STRING_INPUT"

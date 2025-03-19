@@ -17,7 +17,7 @@ export interface DataTableProps {
   rows?: Object[]
 
   // rows parameter is passed if isServerMode = true
-  endpoint?: string
+  fetchRows?: string | (() => Promise<T[]>)
 
   // Representation
   representation?: RepresentationProps

@@ -19,14 +19,14 @@ import useRepresentationStore from "@/stores/representation-store"
 import useSlotsStore from "@/stores/slots-store"
 import useFilterStore from "@/stores/filter-store"
 import usePaginationStore from "@/stores/pagination-store"
-import {onMounted, useSlots} from "vue"
+import {useSlots} from "vue"
 import normalizeColumn from "@/utility/normalize-column"
 import {DataTableProps} from "@/types/datatable-props"
 import applyNativeListeners from "@/filter/native/listeners"
 import applyNativeFilter from "@/filter/native"
 import applyBackendListeners from "@/filter/backend/listeners"
 import applyBackendFilter from "@/filter/backend"
-import { getActivePinia, createPinia, setActivePinia } from "pinia"
+import {getActivePinia, createPinia, setActivePinia} from "pinia"
 
 if (!getActivePinia()) {
   const pinia = createPinia()
@@ -35,44 +35,55 @@ if (!getActivePinia()) {
 
 const props = defineProps<DataTableProps>()
 
-onMounted(() => {
-  // set default values for column
-  const columns = props.columns.map(normalizeColumn)
+// set default values for column
+const columns = props.columns.map(normalizeColumn)
 
 // dataTableStore
-  const dataTableStore = useDataTableStore()
-  dataTableStore.setColumns(columns)
-  dataTableStore.setRows(props.rows ?? [])
-  dataTableStore.setIsServerMode(props.isServerMode)
-  dataTableStore.setEndpoint(props.endpoint ?? '')
-  dataTableStore.init()
+const dataTableStore = useDataTableStore()
+dataTableStore.setColumns(columns)
+dataTableStore.setIsServerMode(props.isServerMode)
+
+if (props.isServerMode) {
+  if (!props.fetchRows || (typeof props.fetchRows !== "string" && typeof props.fetchRows !== "function")) {
+    throw new Error("Prop `fetchRows` is required and must be a string or function when `isServerMode` is true");
+  }
+  dataTableStore.setFetchRows(props.fetchRows);
+}
+
+if (!props.isServerMode) {
+  if (!props.rows || (typeof props.rows !== "object" && typeof props.rows !== "function")) {
+    throw new Error("Prop `rows` is required and must be an array or function when `isServerMode` is false");
+  }
+  dataTableStore.setRows(props.rows ?? []);
+}
+
+dataTableStore.init()
 
 // representationStore
-  const representationStore = useRepresentationStore()
-  representationStore.setProps(props.representation)
+const representationStore = useRepresentationStore()
+representationStore.setProps(props.representation)
 
 // set filter store
-  const filterStore = useFilterStore()
-  filterStore.setProps(props.filter)
+const filterStore = useFilterStore()
+filterStore.setProps(props.filter)
 
 // set pagination store
-  const paginationStore = usePaginationStore()
-  paginationStore.setProps(props.pagination)
+const paginationStore = usePaginationStore()
+paginationStore.setProps(props.pagination)
 
 // set slots to global store
-  const slotsStore = useSlotsStore()
-  slotsStore.setSlots(useSlots())
+const slotsStore = useSlotsStore()
+slotsStore.setSlots(useSlots())
 
-  representationStore.setProps({hasExpand: slotsStore.hasSlot('expand')})
+representationStore.setProps({hasExpand: slotsStore.hasSlot('expand')})
 
-  if (props.isServerMode) {
-    applyBackendListeners()
-    applyBackendFilter(false)
-  } else {
-    applyNativeListeners()
-    applyNativeFilter()
-  }
-})
+if (props.isServerMode) {
+  applyBackendListeners()
+  applyBackendFilter(false)
+} else {
+  applyNativeListeners()
+  applyNativeFilter()
+}
 </script>
 
 <style>

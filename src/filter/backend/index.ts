@@ -7,37 +7,51 @@ import applySort from "@/filter/backend/sorting"
 import applySearch from "@/filter/backend/searching"
 import applyPaginate from "@/filter/backend/paginate"
 import {BackendParams} from "@/types/backend-params"
+import jsonToQuery from "@/utility/json-to-query"
 
-const sendRequest = (params: Partial<BackendParams>): void => {
-  const datatable = useDataTableStore()
-  const pagination = usePaginationStore()
-  const api = useApi()
+const datatable = useDataTableStore()
+const pagination = usePaginationStore()
+const api = useApi()
 
-  datatable.isLoading = true
-
-  api.get(datatable.endpoint, params).then(response => {
-    datatable.paginatedItems = response.data
-    datatable.rows = response.data
-    datatable.filteredItems = response.data
-
-    datatable.isLoading = false
-
-    pagination.totalRows = response.meta.total
-  })
+const handleResponse = (response: any) => {
+  datatable.isLoading = false
+  datatable.paginatedItems = response.data
+  datatable.rows = response.data
+  datatable.filteredItems = response.data
+  pagination.totalRows = response.meta?.total ?? 0
 }
 
-const sendRequestWithDelay = debounce((params) => {
-  sendRequest(params)
-}, 300)
+const handleError = (error: any) => {
+  console.error("Error fetching data:", error)
+  datatable.isLoading = false
+}
 
-export default function applyBackendFilter(needDelay: boolean) {
+const sendRequest = async (params: Partial<BackendParams>): Promise<void> => {
+  datatable.isLoading = true
+
+  try {
+    const response = typeof datatable.fetchRows === "function"
+      ? await datatable.fetchRows(params, jsonToQuery(params))
+      : await api.get(datatable.fetchRows, params)
+
+    handleResponse(response)
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+const sendRequestWithDelay = debounce(sendRequest, 300)
+
+const getBackendParams = (): Partial<BackendParams> => {
   let params = {}
-
   params = applyPaginate(params)
   params = applySearch(params)
   params = applySort(params)
   params = applyFilter(params)
+  return params
+}
 
-  if (needDelay) sendRequestWithDelay(params)
-  else sendRequest(params)
+export default function applyBackendFilter(needDelay: boolean): void {
+  const params = getBackendParams()
+  needDelay ? sendRequestWithDelay(params) : sendRequest(params)
 }
