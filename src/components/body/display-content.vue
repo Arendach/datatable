@@ -1,5 +1,5 @@
 <template>
-  <template v-for="(item, i) in dataTable.paginatedItems" :key="item[uniqueKey] ? item[uniqueKey] : i">
+  <template v-for="(item, i) in dataTable.filteredItems" :key="item[uniqueKey] ? item[uniqueKey] : i">
     <tr
       :class="[rowClass && typeof rowClass === 'function' ? rowClass(item) : rowClass, 'exportable']"
     >

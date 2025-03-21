@@ -19,23 +19,27 @@ import useRepresentationStore from "@/stores/representation-store"
 import useSlotsStore from "@/stores/slots-store"
 import useFilterStore from "@/stores/filter-store"
 import usePaginationStore from "@/stores/pagination-store"
-import {onMounted, useSlots} from "vue"
+import {onMounted, useSlots, defineExpose} from "vue"
 import normalizeColumn from "@/utility/normalize-column"
 import {DataTableProps} from "@/types/datatable-props"
 import applyNativeListeners from "@/filter/native/listeners"
 import applyNativeFilter from "@/filter/native"
 import applyBackendListeners from "@/filter/backend/listeners"
 import applyBackendFilter from "@/filter/backend"
+import useExposes from "@/exposes/index"
+
+const exposes = useExposes()
+defineExpose(exposes)
 
 const props = defineProps<DataTableProps>()
 const slots = useSlots();
 
 onMounted(() => {
 
-// set default values for column
+  // set default values for column
   const columns = props.columns.map(normalizeColumn)
 
-// dataTableStore
+  // dataTableStore
   const dataTableStore = useDataTableStore()
   dataTableStore.setColumns(columns)
   dataTableStore.setIsServerMode(props.isServerMode)
@@ -56,19 +60,19 @@ onMounted(() => {
 
   dataTableStore.init()
 
-// representationStore
+  // representationStore
   const representationStore = useRepresentationStore()
   representationStore.setProps(props.representation)
 
-// set filter store
+  // set filter store
   const filterStore = useFilterStore()
   filterStore.setProps(props.filter)
 
-// set pagination store
+  // set pagination store
   const paginationStore = usePaginationStore()
   paginationStore.setProps(props.pagination)
 
-// set slots to global store
+  // set slots to global store
   const slotsStore = useSlotsStore()
   slotsStore.setSlots(slots)
 

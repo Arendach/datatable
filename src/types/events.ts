@@ -38,6 +38,11 @@ enum Events {
    * Data loaded from server
    */
   DATA_LOADED = 'data-loaded',
+
+  /**
+   * Data row after delete event
+   */
+  ROW_DELETED = 'row-deleted',
 }
 
 export default Events

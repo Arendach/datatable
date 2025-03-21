@@ -24,6 +24,10 @@ const applyBackendListeners = () => {
   useEventBus().on(Events.PAGE_CHANGED, () => {
     applyBackendFilter(false)
   })
+
+  useEventBus().on(Events.ROW_DELETED, () => {
+    applyBackendFilter(false)
+  })
 }
 
 export default applyBackendListeners

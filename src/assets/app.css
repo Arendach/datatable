@@ -195,7 +195,7 @@
 }
 
 .table-responsive {
-  overflow: visible !important; /* Щоб календар не обрізався */
+  overflow: visible !important;
 }
 
 
