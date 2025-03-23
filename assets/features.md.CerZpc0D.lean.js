@@ -1,1 +1,0 @@
-import{_ as s,c as i,ae as a,o as e}from"./chunks/framework.D53Ul0KH.js";const c=JSON.parse('{"title":"Features","description":"","frontmatter":{},"headers":[],"relativePath":"features.md","filePath":"features.md"}'),n={name:"features.md"};function d(l,t,h,o,p,r){return e(),i("div",null,t[0]||(t[0]=[a("",21)]))}const E=s(n,[["render",d]]);export{c as __pageData,E as default};
