@@ -27,6 +27,7 @@ export default {
         text: 'Additional',
         items: [
           {text: 'Usage slots', link: '/additional/slots'},
+          {text: 'Expanded rows', link: '/additional/expanded'},
         ]
       },
     ],
