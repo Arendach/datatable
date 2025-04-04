@@ -19,6 +19,7 @@ export default defineConfig({
         assetFileNames: 'assets/[name].[ext]',
       },
     },
+    cssCodeSplit: false,
   },
   plugins: [vue()],
   server: {

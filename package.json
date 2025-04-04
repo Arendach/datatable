@@ -9,7 +9,8 @@
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js"
     },
-    "./src/*": "./src/*"
+    "./src/*": "./src/*",
+    "./style.css": "./dist/assets/ares-datatable.css"
   },
   "scripts": {
     "build": "vite build",

@@ -87,7 +87,3 @@ onMounted(() => {
   }
 })
 </script>
-
-<style>
-@import "@/assets/app.css";
-</style>

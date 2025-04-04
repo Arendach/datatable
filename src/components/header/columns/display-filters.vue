@@ -127,7 +127,6 @@ import ColumnFilter from "@/components/header/columns/column-filter.vue"
 import useEventBus from "@/composables/use-event-bus"
 import Events from "@/types/events"
 import VueDatePicker from "@vuepic/vue-datepicker"
-import "@vuepic/vue-datepicker/dist/main.css"
 import displayDate from "@/utility/display-date"
 import displayDateRange from "@/utility/display-date-range"
 import BooleanToggle from "@/components/header/filters/boolean-toggle.vue"
@@ -178,5 +177,3 @@ const displayAdditionalFilter = (filterType?: FilterType) => {
   ].includes(filterType)
 }
 </script>
-
-<style src="@vueform/multiselect/themes/default.css"></style>
