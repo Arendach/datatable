@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import {computed} from "vue"
 import displayCellValue from "@/utility/display-cell-value"
-import displayDate from "@/utility/display-date";
+import displayDate from "@/utility/display-date"
 
 const props = defineProps<{
   name: string,

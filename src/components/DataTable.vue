@@ -19,7 +19,7 @@ import useRepresentationStore from "@/stores/representation-store"
 import useSlotsStore from "@/stores/slots-store"
 import useFilterStore from "@/stores/filter-store"
 import usePaginationStore from "@/stores/pagination-store"
-import {onMounted, useSlots, defineExpose} from "vue"
+import {defineExpose, onMounted, useSlots} from "vue"
 import normalizeColumn from "@/utility/normalize-column"
 import {DataTableProps} from "@/types/datatable-props"
 import applyNativeListeners from "@/filter/native/listeners"
@@ -27,6 +27,7 @@ import applyNativeFilter from "@/filter/native"
 import applyBackendListeners from "@/filter/backend/listeners"
 import applyBackendFilter from "@/filter/backend"
 import useExposes from "@/exposes/index"
+import SortDirection from "@/types/sort-direction";
 
 const exposes = useExposes()
 defineExpose(exposes)
@@ -67,6 +68,8 @@ onMounted(() => {
   // set filter store
   const filterStore = useFilterStore()
   filterStore.setProps(props.filter)
+  filterStore.currentSortDirection = props.filter.sortDirection || SortDirection.DEFAULT
+  filterStore.currentSortColumn = props.filter.sortColumn || null
 
   // set pagination store
   const paginationStore = usePaginationStore()

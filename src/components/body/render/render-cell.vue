@@ -21,17 +21,17 @@
     </template>
 
     <!-- Date render -->
-    <template v-else-if="column.type === ColumnType.DATE || column.type === ColumnType.DATE_RANGE">
-      <render-date :name="column.field" :item="item"></render-date>
+    <template v-else-if="column.type === ColumnType.DATE">
+      <render-date :name="column.field" :item="item"/>
     </template>
 
     <template v-else-if="column.type === ColumnType.PICTURE">
-      <render-picture :url="displayCellValue(item, column.field)"></render-picture>
+      <render-picture :url="displayCellValue(item, column.field)"/>
     </template>
 
     <!-- Native text render -->
     <template v-else>
-      {{ displayCellValue(item, column.field) }}
+      <smart-text :value="displayCellValue(item, column.field)" :html="column.html"/>
     </template>
   </td>
 </template>
@@ -45,6 +45,7 @@ import {Column} from "@/types/column"
 import ColumnType from "@/types/column-type"
 import useRepresentationStore from "@/stores/representation-store"
 import useSlotsStore from "@/stores/slots-store"
+import SmartText from "@/components/body/render/smart-text.vue"
 
 defineProps<{
   column: Column,

@@ -1,7 +1,9 @@
 import dateFormat from "dateformat"
 import useRepresentationStore from "@/stores/representation-store"
 
-function displayDate(inputDate: string): string {
+function displayDate(inputDate: string | null): string {
+  if (!inputDate) return null
+
   const representation = useRepresentationStore()
   const date = new Date(inputDate)
 
