@@ -27,7 +27,7 @@ import applyNativeFilter from "@/filter/native"
 import applyBackendListeners from "@/filter/backend/listeners"
 import applyBackendFilter from "@/filter/backend"
 import useExposes from "@/exposes/index"
-import SortDirection from "@/types/sort-direction";
+import SortDirection from "@/types/sort-direction"
 
 const exposes = useExposes()
 defineExpose(exposes)

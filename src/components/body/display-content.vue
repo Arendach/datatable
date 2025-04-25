@@ -13,8 +13,7 @@
         <div class="form-check">
           <input
             class="form-check-input"
-            :checked="dataTable.isSelected(item)"
-            @change="dataTable.toggleSelection(item)"
+            v-model="item.isSelected"
             type="checkbox"
             @click.stop/>
         </div>

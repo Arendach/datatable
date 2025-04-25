@@ -17,7 +17,7 @@ const useDataTableStore = defineStore('dataTable', {
   }),
   getters: {
     isAllSelected(state): boolean {
-      return areArraysIdentical(state.filteredItems, state.selected)
+      return state.filteredItems.length > 0 && state.filteredItems.every(item => item.isSelected)
     },
     sortColumn(state): null | Column {
       let filterStore = useFilterStore()
@@ -56,10 +56,18 @@ const useDataTableStore = defineStore('dataTable', {
       else this.selected.push(item)
     },
     selectAll(): void {
-      this.selected = this.filteredItems
+      this.rows = this.rows.map(row => {
+        row.isSelected = true
+
+        return row
+      })
     },
     clearSelected(): void {
-      this.selected = []
+      this.rows = this.rows.map(row => {
+        row.isSelected = false
+
+        return row
+      })
     }
   }
 })
