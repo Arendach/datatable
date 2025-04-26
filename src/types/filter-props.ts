@@ -6,6 +6,4 @@ export interface FilterProps {
   sortColumn: string | null
   sortDirection: SortDirection
   useFiltering: boolean
-  currentSortColumn: string | null
-  currentSortDirection: SortDirection
 }

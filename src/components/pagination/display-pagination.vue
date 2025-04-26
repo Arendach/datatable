@@ -47,7 +47,7 @@ import Events from "@/types/events"
 const paginate = usePaginationStore()
 
 const changePage = (newPage: number) => {
-  paginate.page = newPage
+  paginate.setPage(newPage)
   useEventBus().emit(Events.PAGE_CHANGED)
 }
 </script>

@@ -9,10 +9,10 @@ function applySort(params: Partial<BackendParams>): Partial<BackendParams> {
   if (!filter.useSorting) return params
 
   // if empty sort column then return original params
-  if (!filter.currentSortColumn) return params
+  if (!filter.sortColumn) return params
 
-  params.sortColumn = filter.currentSortColumn
-  params.sortDirection = filter.currentSortDirection ?? SortDirection.ASC
+  params.sortColumn = filter.sortColumn
+  params.sortDirection = filter.sortDirection ?? SortDirection.ASC
 
   return params
 }

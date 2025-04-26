@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import {useFilterRowCount} from "@/composables/use-filter-row-count"
+import useStore from "@/utility/use-store"
 
 interface PaginationState {
   totalRows: number
@@ -9,6 +10,8 @@ interface PaginationState {
   showNumbersCount: number
   noDataContent: string
 }
+
+const store = useStore()
 
 const usePaginationStore = defineStore('pagination', {
   state: (): PaginationState => ({
@@ -66,8 +69,24 @@ const usePaginationStore = defineStore('pagination', {
     },
   },
   actions: {
-    setProps(props: Partial<PaginationState>): void {
-      Object.assign(this, props)
+    init(props: Partial<PaginationState>): void {
+      this.$patch(props)
+
+      const saved = store.load('pagination')
+      if (saved) {
+        this.$patch(saved)
+      }
+
+      this.saveToStorage()
+    },
+    setPage(page: number): void {
+      this.page = page
+      this.saveToStorage()
+    },
+    saveToStorage(): void {
+      const {page} = this
+
+      store.save('pagination', {page})
     },
   },
 })

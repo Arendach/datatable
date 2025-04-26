@@ -16,13 +16,19 @@
           @click="column.sort && filter.useSorting ? sortChange(column.field) : null"
         >
           <div v-if="column.selectable" class="form-check form-check-xs">
-            <input class="form-check-input" type="checkbox" :value="column.field" v-model="selectedColumns" @click.stop/>
+            <input
+              class="form-check-input"
+              type="checkbox"
+              :value="column.field"
+              v-model="selectedColumns"
+              @click.stop
+            />
             <label class="form-check-label">{{ column.title }}</label>
             <display-sort-direction
               :column="column"
               :sortable="filter.useSorting"
-              :sort-column="filter.currentSortColumn"
-              :sort-direction="filter.currentSortDirection"/>
+              :sort-column="filter.sortColumn"
+              :sort-direction="filter.sortDirection"/>
           </div>
 
           <div class="form-header-nowrap" v-else>
@@ -30,8 +36,8 @@
             <display-sort-direction
               :column="column"
               :sortable="filter.useSorting"
-              :sort-column="filter.currentSortColumn"
-              :sort-direction="filter.currentSortDirection"/>
+              :sort-column="filter.sortColumn"
+              :sort-direction="filter.sortDirection"/>
           </div>
         </div>
       </th>
@@ -58,37 +64,32 @@ const eventBus = useEventBus()
 const selectedColumns = ref([])
 
 const toggleSelectAll = () => {
-  if (dataTable.isAllSelected) dataTable.clearSelected()
-  else dataTable.selectAll()
+  dataTable.setAllSelected(!dataTable.isAllSelected)
 }
 
 const sortChange = function (field: string) {
-  if (field !== filter.currentSortColumn) {
-    filter.currentSortColumn = field
-    filter.currentSortDirection = SortDirection.ASC
+  if (field !== filter.sortColumn) {
+    filter.setSortColumn(field)
+    filter.setSortDirection(SortDirection.ASC)
 
     eventBus.emit(Events.SORT_CHANGED)
 
     return
   }
 
-  if (filter.currentSortDirection === SortDirection.ASC) {
-    filter.currentSortDirection = SortDirection.DESC
-  } else if (filter.currentSortDirection === SortDirection.DESC) {
-    filter.currentSortDirection = SortDirection.DEFAULT
-    filter.currentSortColumn = null
+  if (filter.sortDirection === SortDirection.ASC) {
+    filter.setSortDirection(SortDirection.DESC)
+  } else if (filter.sortDirection === SortDirection.DESC) {
+    filter.setSortDirection(SortDirection.DEFAULT)
+    filter.setSortColumn(null)
   } else {
-    filter.currentSortDirection = SortDirection.ASC
+    filter.setSortDirection(SortDirection.ASC)
   }
 
   eventBus.emit(Events.SORT_CHANGED)
 }
 
-const getColumnClasses = (column: Column) => [
-  filter.useSorting && column.sort ? 'bh-cursor-pointer' : '',
-  column.exportable ? 'exportable' : '',
-  column.className || ''
-]
+const getColumnClasses = (column: Column) => [column.className || '']
 
 const getColumnStyles = (column: Column) => ({
   'width': column.width,

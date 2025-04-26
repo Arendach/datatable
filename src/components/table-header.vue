@@ -16,8 +16,8 @@
                 type="text"
                 class="form-control form-control-xs"
                 placeholder="Please enter text to filter"
-                v-model="filter.search"
-                @input="eventBus.emit(Events.SEARCH_CHANGED)"
+                :value="filter.search"
+                @input="changeSearch"
               >
               <button class="btn btn-outline-secondary" type="button">Search</button>
             </div>
@@ -45,7 +45,7 @@
                   :key="column.field"
                   class="dropdown-item"
                 >
-                  <input type="checkbox" v-model="column.show">
+                  <input type="checkbox" v-model="column.show" @change="dataTable.saveColumns()">
                   <span class="ms-2" v-text="column.title"></span>
                 </li>
               </ul>
@@ -78,4 +78,9 @@ const columnCount = useColumnCount()
 
 watch(hasCheckbox, (value: boolean) => representation.hasCheckbox = value)
 watch(hasAutoListing, (value: boolean) => representation.hasAutoListing = value)
+
+const changeSearch = (event) => {
+  filter.setSearch(event.target.value)
+  eventBus.emit(Events.SEARCH_CHANGED)
+}
 </script>

@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import SortDirection from "@/types/sort-direction"
+import useStore from "@/utility/use-store"
 
 interface FilterStore {
   search: string | null
@@ -7,9 +8,9 @@ interface FilterStore {
   sortColumn: string | null
   sortDirection: SortDirection
   useFiltering: boolean
-  currentSortColumn: string | null
-  currentSortDirection: SortDirection
 }
+
+const store = useStore()
 
 const useFilterStore = defineStore('filter', {
   state: (): FilterStore => ({
@@ -18,12 +19,33 @@ const useFilterStore = defineStore('filter', {
     sortColumn: null,
     sortDirection: SortDirection.DEFAULT,
     useFiltering: false,
-    currentSortColumn: null,
-    currentSortDirection: SortDirection.DEFAULT,
   }),
   actions: {
-    setProps(props: Partial<FilterStore>): void {
-      Object.assign(this, props)
+    init(props: Partial<FilterStore>): void {
+      this.$patch(props)
+
+      const saved = store.load('filters')
+      if (saved) {
+        this.$patch(saved)
+      }
+
+      this.saveToStorage()
+    },
+    saveToStorage(): void {
+      const {search, sortColumn, sortDirection} = this
+      store.save('filters', {search, sortColumn, sortDirection})
+    },
+    setSortColumn(sortColumn: string | null): void {
+      this.sortColumn = sortColumn
+      this.saveToStorage()
+    },
+    setSortDirection(sortDirection: SortDirection): void {
+      this.sortDirection = sortDirection
+      this.saveToStorage()
+    },
+    setSearch(search: string | null): void {
+      this.search = search
+      this.saveToStorage()
     },
   },
 })

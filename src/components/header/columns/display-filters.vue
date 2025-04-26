@@ -16,7 +16,7 @@
             v-model.trim="column.filter.value"
             type="text"
             class="form-control form-control-xs"
-            @input="eventBus.emit(Events.FILTERS_UPDATED)"
+            @input="filterUpdate"
           />
 
           <!-- NUMBER_INPUT -->
@@ -25,7 +25,7 @@
             v-model.number="column.filter.value"
             type="number"
             class="form-control form-control-xs"
-            @input="eventBus.emit(Events.FILTERS_UPDATED)"
+            @input="filterUpdate"
           />
 
           <!-- SELECT -->
@@ -38,7 +38,7 @@
             value-prop="value"
             track-by="value"
             :object="true"
-            @change="(value) => {column.filter.value = value.length ? value : null; eventBus.emit(Events.FILTERS_UPDATED)}"
+            @change="(value) => {column.filter.value = value.length ? value : null; filterUpdate}"
           />
 
           <!-- SELECT_MULTIPLE -->
@@ -53,14 +53,14 @@
             track-by="value"
             :object="true"
             v-model="column.filter.value"
-            @change="(value) => {column.filter.value = value.length ? value : null; eventBus.emit(Events.FILTERS_UPDATED)}"
+            @change="(value) => {column.filter.value = value.length ? value : null; filterUpdate}"
           />
 
           <!-- DATE_PICKER -->
           <vue-date-picker
             v-else-if="column.filter.type === FilterType.DATE_PICKER"
             v-model="column.filter.value"
-            @update:model-value="eventBus.emit(Events.FILTERS_UPDATED)"
+            @update:model-value="filterUpdate"
             :preview-format="displayDate"
             :format="displayDate"
             :auto-apply="true"
@@ -73,7 +73,7 @@
           <vue-date-picker
             v-else-if="column.filter.type === FilterType.DATE_RANGE"
             v-model="column.filter.value"
-            @update:model-value="eventBus.emit(Events.FILTERS_UPDATED)"
+            @update:model-value="filterUpdate"
             :enable-time-picker="false"
             :preview-format="displayDateRange"
             :format="displayDateRange"
@@ -85,7 +85,7 @@
           <boolean-toggle
             v-else-if="column.filter.type === FilterType.SLIDER_BOOLEAN"
             :model-value="column.filter.value"
-            @update:model-value="value => { column.filter.value = value; eventBus.emit(Events.FILTERS_UPDATED) }"
+            @update:model-value="value => { column.filter.value = value; filterUpdate }"
           />
 
           <!-- SELECT_BOOLEAN -->
@@ -93,7 +93,7 @@
             v-else-if="column.filter.type === FilterType.SELECT_BOOLEAN"
             v-model="column.filter.value"
             class="form-control form-control-xs"
-            @change="eventBus.emit(Events.FILTERS_UPDATED)"
+            @change="filterUpdate"
           >
             <option :value="null">-</option>
             <option :value="true">Yes</option>
@@ -175,5 +175,10 @@ const displayAdditionalFilter = (filterType?: FilterType) => {
     FilterType.SELECT,
     FilterType.SELECT_MULTIPLE,
   ].includes(filterType)
+}
+
+const filterUpdate = () => {
+  eventBus.emit(Events.FILTERS_UPDATED)
+  dataTable.saveColumns()
 }
 </script>

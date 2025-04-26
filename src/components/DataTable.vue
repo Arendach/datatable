@@ -27,15 +27,17 @@ import applyNativeFilter from "@/filter/native"
 import applyBackendListeners from "@/filter/backend/listeners"
 import applyBackendFilter from "@/filter/backend"
 import useExposes from "@/exposes/index"
-import SortDirection from "@/types/sort-direction"
+import useUniqueId from "@/composables/use-unique-id"
 
 const exposes = useExposes()
 defineExpose(exposes)
 
 const props = defineProps<DataTableProps>()
 const slots = useSlots();
+const uniqueId = useUniqueId()
 
 onMounted(() => {
+  uniqueId.setUniqueId(props.uniqueId)
 
   // set default values for column
   const columns = props.columns.map(normalizeColumn)
@@ -67,13 +69,11 @@ onMounted(() => {
 
   // set filter store
   const filterStore = useFilterStore()
-  filterStore.setProps(props.filter)
-  filterStore.currentSortDirection = props.filter.sortDirection || SortDirection.DEFAULT
-  filterStore.currentSortColumn = props.filter.sortColumn || null
+  filterStore.init(props.filter)
 
   // set pagination store
   const paginationStore = usePaginationStore()
-  paginationStore.setProps(props.pagination)
+  paginationStore.init(props.pagination)
 
   // set slots to global store
   const slotsStore = useSlotsStore()

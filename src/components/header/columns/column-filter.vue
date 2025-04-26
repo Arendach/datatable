@@ -17,6 +17,7 @@ import Condition from "@/types/condition"
 import {Column} from "@/types/column"
 import useEventBus from "@/composables/use-event-bus"
 import Events from "@/types/events"
+import useDataTableStore from "@/stores/data-table-store"
 
 const conditions = reactive({
   default: {
@@ -48,6 +49,7 @@ const conditions = reactive({
 })
 
 const props = defineProps<{ column: Column }>()
+const datatable = useDataTableStore()
 
 const select = (condition: Condition) => {
   props.column.filter.condition = condition
@@ -57,5 +59,6 @@ const select = (condition: Condition) => {
   }
 
   useEventBus().emit(Events.FILTERS_UPDATED)
+  dataTable.saveColumns()
 }
 </script>

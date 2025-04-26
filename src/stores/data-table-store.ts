@@ -1,17 +1,22 @@
 import {defineStore} from 'pinia'
 import {Column} from "@/types/column"
-import areArraysIdentical from "@/utility/are-arrays-identical"
 import useFilterStore from "@/stores/filter-store"
+import useStore from "@/utility/use-store"
+
+type RowItem = Record<string, any>
+
+const store = useStore()
 
 const useDataTableStore = defineStore('dataTable', {
   state: () => ({
+    uniqueId: 'datatable' as string,
     columns: [] as Column[],
-    rows: [] as Object[],
-    isServerMode: false as Boolean,
-    selected: [] as Array<Object>,
-    filteredItems: [] as Array<Object>,
-    paginatedItems: [] as Array<Object>,
-    isLoading: true,
+    rows: [] as RowItem[],
+    isServerMode: false as boolean,
+    selected: [] as RowItem[],
+    filteredItems: [] as RowItem[],
+    paginatedItems: [] as RowItem[],
+    isLoading: true as boolean,
     fetchRows: '',
     expandedRows: [],
   }),
@@ -19,55 +24,44 @@ const useDataTableStore = defineStore('dataTable', {
     isAllSelected(state): boolean {
       return state.filteredItems.length > 0 && state.filteredItems.every(item => item.isSelected)
     },
-    sortColumn(state): null | Column {
-      let filterStore = useFilterStore()
-      let filteredColumns = state.columns.filter(col => col.field === filterStore.currentSortColumn)
-
-      if (filteredColumns.length === 1) return filteredColumns[0]
-      return null
+    sortColumn(state): Column | null {
+      const filterStore = useFilterStore()
+      const filteredColumns = state.columns.filter(col => col.field === filterStore.sortColumn)
+      return filteredColumns.length === 1 ? filteredColumns[0] : null
     }
   },
   actions: {
     setColumns(columns: Column[]): void {
       this.columns = columns
     },
-    setRows(rows: Array<Object>): void {
+    setRows(rows: RowItem[]): void {
       this.rows = rows
     },
-    setFetchRows(fetchRows): void {
+    setFetchRows(fetchRows: any): void {
       this.fetchRows = fetchRows
     },
-    init() {
+    init(): void {
       this.filteredItems = this.rows
 
       if (!this.isServerMode) {
         this.isLoading = false
       }
-    },
-    setIsServerMode(isSeverMode: Boolean): void {
-      this.isServerMode = isSeverMode
-    },
-    isSelected(item: Object): boolean {
-      return this.selected.some(selectedItem => JSON.stringify(selectedItem) === JSON.stringify(item))
-    },
-    toggleSelection(item: Object): void {
-      const index = this.selected.findIndex(selectedItem => JSON.stringify(selectedItem) === JSON.stringify(item))
-      if (index !== -1) this.selected.splice(index, 1)
-      else this.selected.push(item)
-    },
-    selectAll(): void {
-      this.rows = this.rows.map(row => {
-        row.isSelected = true
 
-        return row
-      })
-    },
-    clearSelected(): void {
-      this.rows = this.rows.map(row => {
-        row.isSelected = false
+      const saved = store.load('columns')
 
-        return row
-      })
+      if (saved) this.columns = saved
+    },
+    setIsServerMode(isServerMode: boolean): void {
+      this.isServerMode = isServerMode
+    },
+    isSelected(item: RowItem): boolean {
+      return this.selected.some((selectedItem: RowItem) => JSON.stringify(selectedItem) === JSON.stringify(item))
+    },
+    setAllSelected(value: boolean): void {
+      this.rows.forEach((row: RowItem) => row.isSelected = value)
+    },
+    saveColumns(): void {
+      store.save('columns', this.columns)
     }
   }
 })

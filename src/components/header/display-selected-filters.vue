@@ -2,12 +2,37 @@
   <div class="selected-filters-container">
     <!-- Кнопка для скидання всіх фільтрів -->
     <button
-      v-if="filters.length > 0 || dataTableStore.sortColumn"
+      v-if="filters.length > 0 || dataTableStore.sortColumn || filterStore.search"
       class="clear-filters-btn clear-filters-btn-xs"
       @click="clearAllFilters"
     >
       Clear
     </button>
+
+    <div class="selected-filter selected-filter-xs" v-if="filterStore.search">
+      <span class="selected-filter-title">Search:</span>
+      <span class="selected-filter-value">{{ filterStore.search }}</span>
+
+      <button
+        type="button"
+        class="remove-btn remove-btn-xs"
+        aria-label="Remove"
+        @click="removeSearching()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          class="remove-icon"
+        >
+          <path
+            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </svg>
+      </button>
+    </div>
 
     <div class="selected-filter selected-filter-xs" v-if="dataTableStore.sortColumn">
       <span class="selected-filter-title">Order by:</span>
@@ -74,10 +99,10 @@ import {Column} from "@/types/column"
 import ColumnType from "@/types/column-type"
 import FilterType from "@/types/filter-type"
 import displayDate from "@/utility/display-date"
-import {FilterOption} from "@/types/filter-option";
-import ColumnFilter from "@/types/column-filter";
+import {FilterOption} from "@/types/filter-option"
+import ColumnFilter from "@/types/column-filter"
 import useFilterStore from "@/stores/filter-store"
-import SortDirection from "@/types/sort-direction";
+import SortDirection from "@/types/sort-direction"
 
 const dataTableStore = useDataTableStore()
 const filterStore = useFilterStore()
@@ -123,25 +148,36 @@ function removeFilter(field: string) {
   if (column) {
     column.filter.value = null
     eventBus.emit(Events.FILTERS_UPDATED)
+    dataTableStore.saveColumns()
   }
 }
 
 // Скидання всіх фільтрів
+// todo: пофіксити проблему багатьох запитів до сервера
 function clearAllFilters() {
   dataTableStore.columns.forEach((col: Column & { filter: ColumnFilter }) => {
     col.filter.value = null
   })
 
   eventBus.emit(Events.FILTERS_UPDATED)
+  dataTableStore.saveColumns()
 
   removeSorting()
+  removeSearching()
 }
 
 // Скидання сортування
 function removeSorting() {
-  filterStore.currentSortColumn = null
-  filterStore.currentSortDirection = SortDirection.DEFAULT
+  filterStore.setSortColumn(null)
+  filterStore.setSortDirection(SortDirection.DEFAULT)
 
   eventBus.emit(Events.SORT_CHANGED)
+}
+
+// Скидання сортування
+function removeSearching() {
+  filterStore.setSearch(null)
+
+  eventBus.emit(Events.SEARCH_CHANGED)
 }
 </script>
