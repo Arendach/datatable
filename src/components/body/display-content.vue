@@ -69,7 +69,7 @@ const toggleExpand = (id: any) => {
 }
 
 const changeSelectedRows = () => {
-  eventBus.emit(Events.CHANGE_SELECTED_ROWS, dataTable.selected)
+  eventBus.emit(Events.CHANGE_SELECTED_ROWS, dataTable.selectedRows)
 }
 
 </script>
