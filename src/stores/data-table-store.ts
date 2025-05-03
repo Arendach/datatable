@@ -11,9 +11,9 @@ const useDataTableStore = defineStore('dataTable', {
   state: () => ({
     uniqueId: 'datatable' as string,
     columns: [] as Column[],
+    selectedColumns: [] as Column[],
     rows: [] as RowItem[],
     isServerMode: false as boolean,
-    selected: [] as RowItem[],
     filteredItems: [] as RowItem[],
     paginatedItems: [] as RowItem[],
     isLoading: true as boolean,
@@ -28,7 +28,10 @@ const useDataTableStore = defineStore('dataTable', {
       const filterStore = useFilterStore()
       const filteredColumns = state.columns.filter(col => col.field === filterStore.sortColumn)
       return filteredColumns.length === 1 ? filteredColumns[0] : null
-    }
+    },
+    selectedRows(state): RowItem[] {
+      return state.rows.filter(row => row.isSelected)
+    },
   },
   actions: {
     setColumns(columns: Column[]): void {

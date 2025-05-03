@@ -9,35 +9,27 @@
       </div>
     </th>
 
-    <template v-for="column in dataTable.columns" :key="column.field">
+    <template v-for="column in columns" :key="column.field">
       <th v-if="column.show" :class="getColumnClasses(column)" :style="getColumnStyles(column)" class="middle">
-        <div
-          class="form-header-nowrap"
-          @click="column.sort && filter.useSorting ? sortChange(column.field) : null"
-        >
-          <div v-if="column.selectable" class="form-check form-check-xs">
+        <div class="form-header-nowrap" @click="column.sort && filter.useSorting ? sortChange(column.field) : null">
+          <div v-if="column.selectable" class="form-check form-check-xs" @click.stop>
             <input
               class="form-check-input"
               type="checkbox"
-              :value="column.field"
-              v-model="selectedColumns"
-              @click.stop
+              :value="column"
+              v-model="dataTable.selectedColumns"
+              @change="changeSelectedColumns"
             />
-            <label class="form-check-label">{{ column.title }}</label>
-            <display-sort-direction
-              :column="column"
-              :sortable="filter.useSorting"
-              :sort-column="filter.sortColumn"
-              :sort-direction="filter.sortDirection"/>
           </div>
 
-          <div class="form-header-nowrap" v-else>
-            {{ column.title }}
+          <div class="d-flex align-items-center gap-1">
+            <span class="column-title">{{ column.title }}</span>
             <display-sort-direction
               :column="column"
               :sortable="filter.useSorting"
               :sort-column="filter.sortColumn"
-              :sort-direction="filter.sortDirection"/>
+              :sort-direction="filter.sortDirection"
+            />
           </div>
         </div>
       </th>
@@ -46,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue"
 import useFilterStore from "@/stores/filter-store"
 import useDataTableStore from "@/stores/data-table-store"
 import useRepresentationStore from "@/stores/representation-store"
@@ -55,16 +46,20 @@ import DisplaySortDirection from "@/components/header/columns/display-sort-direc
 import {Column} from "@/types/column"
 import useEventBus from "@/composables/use-event-bus"
 import Events from "@/types/events"
+import {computed, nextTick} from "vue"
 
 const dataTable = useDataTableStore()
 const filter = useFilterStore()
 const representation = useRepresentationStore()
 const eventBus = useEventBus()
-
-const selectedColumns = ref([])
+const columns = computed(() => dataTable.columns)
 
 const toggleSelectAll = () => {
   dataTable.setAllSelected(!dataTable.isAllSelected)
+
+  nextTick(() => {
+    eventBus.emit(Events.CHANGE_SELECTED_ROWS, dataTable.selectedRows)
+  })
 }
 
 const sortChange = function (field: string) {
@@ -89,6 +84,10 @@ const sortChange = function (field: string) {
   eventBus.emit(Events.SORT_CHANGED)
 }
 
+const changeSelectedColumns = () => {
+  eventBus.emit(Events.CHANGE_SELECTED_COLUMNS, dataTable.selectedColumns)
+}
+
 const getColumnClasses = (column: Column) => [column.className || '']
 
 const getColumnStyles = (column: Column) => ({
@@ -96,3 +95,20 @@ const getColumnStyles = (column: Column) => ({
   'max-width': column.maxWidth
 })
 </script>
+
+<style lang="scss">
+.form-header-nowrap {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  input {
+    cursor: pointer;
+  }
+
+  .column-title {
+    user-select: none;
+  }
+}
+</style>

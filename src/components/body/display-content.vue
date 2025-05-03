@@ -15,6 +15,7 @@
             class="form-check-input"
             v-model="item.isSelected"
             type="checkbox"
+            @change="changeSelectedRows"
             @click.stop/>
         </div>
       </td>
@@ -27,7 +28,7 @@
       <tr v-if="dataTable.expandedRows.includes(item[uniqueKey] ? item[uniqueKey] : i)">
         <td :colspan="columnCount">
           <template v-if="slots.hasSlot('expand')">
-            <template v-for="(node, index) in slots.getSlot('expand')({value: item})" :key="index">
+            <template v-for="(node, index) in slots.getSlot('expand')({value: item})" :key="`e${index}`">
               <div class="expanded-content">
                 <component :is="node"/>
               </div>
@@ -46,12 +47,15 @@ import useRepresentationStore from "@/stores/representation-store"
 import RenderCell from "@/components/body/render/render-cell.vue"
 import {useColumnCount} from "@/composables/use-column-count"
 import useSlotsStore from "@/stores/slots-store"
+import useEventBus from "@/composables/use-event-bus"
+import Events from "@/types/events"
 
 const representation = useRepresentationStore()
 const dataTable = useDataTableStore()
 const slots = useSlotsStore()
 const uniqueKey = useUniqueKey()
 const columnCount = useColumnCount()
+const eventBus = useEventBus()
 
 
 const rowClass = representation.rowClass
@@ -62,6 +66,10 @@ const toggleExpand = (id: any) => {
   } else {
     dataTable.expandedRows.push(id)
   }
+}
+
+const changeSelectedRows = () => {
+  eventBus.emit(Events.CHANGE_SELECTED_ROWS, dataTable.selected)
 }
 
 </script>

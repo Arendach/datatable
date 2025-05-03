@@ -5,8 +5,9 @@
       <display-tbody/>
       <display-tfoot/>
     </table>
+
+    <display-pagination/>
   </div>
-  <display-pagination/>
 </template>
 
 <script setup lang="ts">
@@ -28,6 +29,8 @@ import applyBackendListeners from "@/filter/backend/listeners"
 import applyBackendFilter from "@/filter/backend"
 import useExposes from "@/exposes/index"
 import useUniqueId from "@/composables/use-unique-id"
+import useEventBus from "@/composables/use-event-bus"
+import Events from "@/types/events"
 
 const exposes = useExposes()
 defineExpose(exposes)
@@ -35,6 +38,59 @@ defineExpose(exposes)
 const props = defineProps<DataTableProps>()
 const slots = useSlots();
 const uniqueId = useUniqueId()
+
+const emit = defineEmits([
+  Events.CHANGE_SELECTED_COLUMNS,
+  Events.SEARCH_CHANGED,
+  Events.FILTERS_UPDATED,
+  Events.SORT_CHANGED,
+  Events.PAGE_CHANGED,
+  Events.CHANGE_SELECTED_ROWS,
+  Events.ROW_EXPANDED,
+  Events.ROW_COLLAPSED,
+  Events.DATA_LOADED,
+  Events.ROW_DELETED,
+])
+
+const eventBus = useEventBus()
+
+onMounted(() => {
+  eventBus.on(Events.CHANGE_SELECTED_COLUMNS, (payload: any) => {
+    emit(Events.CHANGE_SELECTED_COLUMNS, payload)
+  })
+
+  eventBus.on(Events.SEARCH_CHANGED, (payload: any) => {
+    emit(Events.SEARCH_CHANGED, payload)
+  })
+
+  eventBus.on(Events.FILTERS_UPDATED, (payload: any) => {
+    emit(Events.FILTERS_UPDATED, payload)
+  })
+
+  eventBus.on(Events.SORT_CHANGED, (payload: any) => {
+    emit(Events.SORT_CHANGED, payload)
+  })
+
+  eventBus.on(Events.PAGE_CHANGED, (payload: any) => {
+    emit(Events.PAGE_CHANGED, payload)
+  })
+
+  eventBus.on(Events.CHANGE_SELECTED_ROWS, (payload: any) => {
+    emit(Events.CHANGE_SELECTED_ROWS, payload)
+  })
+
+  eventBus.on(Events.ROW_EXPANDED, (payload: any) => {
+    emit(Events.ROW_EXPANDED, payload)
+  })
+
+  eventBus.on(Events.ROW_COLLAPSED, (payload: any) => {
+    emit(Events.ROW_COLLAPSED, payload)
+  })
+
+  eventBus.on(Events.ROW_DELETED, (payload: any) => {
+    emit(Events.ROW_DELETED, payload)
+  })
+})
 
 onMounted(() => {
   uniqueId.setUniqueId(props.uniqueId)

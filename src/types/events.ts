@@ -22,7 +22,7 @@ enum Events {
   /**
    * The user selected the line by checkbox
    */
-  ROW_SELECTED = 'row-selected',
+  CHANGE_SELECTED_ROWS = 'change-selected-rows',
 
   /**
    * The user expanded the row
@@ -43,6 +43,13 @@ enum Events {
    * Data row after delete event
    */
   ROW_DELETED = 'row-deleted',
+
+  /**
+   * A constant that represents an action type for updating or modifying the selected columns in a given context.
+   * This constant is typically used in scenarios such as state management systems or event handling
+   * to uniquely identify the operation of changing selected columns.
+   */
+  CHANGE_SELECTED_COLUMNS = 'change-selected-columns',
 }
 
 export default Events
