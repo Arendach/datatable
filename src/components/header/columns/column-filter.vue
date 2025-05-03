@@ -3,7 +3,7 @@
     <li class="dropdown-item" :class="{ active: column.filter.condition === Condition.WITHOUT }">
       <div @click="select(Condition.WITHOUT)">Без фільтра</div>
     </li>
-    <template v-for="(label, condition) in conditions[column.type || 'default']" :key="condition">
+    <template v-for="(label, condition) in typeConditions" :key="condition">
       <li class="dropdown-item" :class="{ active: column.filter.condition === condition }">
         <div @click="select(condition)">{{ label }}</div>
       </li>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive} from 'vue'
+import {reactive, computed} from 'vue'
 import Condition from "@/types/condition"
 import {Column} from "@/types/column"
 import useEventBus from "@/composables/use-event-bus"
@@ -48,6 +48,14 @@ const conditions = reactive({
   },
 })
 
+const typeConditions = computed(() => {
+  const type = props.column.type || 'default'
+  return {
+    ...conditions.default,
+    ...conditions[type],
+  }
+})
+
 const props = defineProps<{ column: Column }>()
 const datatable = useDataTableStore()
 
@@ -59,6 +67,6 @@ const select = (condition: Condition) => {
   }
 
   useEventBus().emit(Events.FILTERS_UPDATED)
-  dataTable.saveColumns()
+  datatable.saveColumns()
 }
 </script>
